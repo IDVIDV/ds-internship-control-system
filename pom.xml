@@ -56,6 +56,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -72,6 +77,16 @@
                     </excludes>
                 </configuration>
             </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.google.cloud.tools</groupId>-->
+<!--                <artifactId>jib-maven-plugin</artifactId>-->
+<!--                <version>1.8.0</version>-->
+<!--                <configuration>-->
+<!--                    <to>-->
+<!--                        <image>ds-internship-control-system</image>-->
+<!--                    </to>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

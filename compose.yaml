@@ -1,13 +1,13 @@
-name: "db-backend"
+name: "ds-internship-control-system"
 
 services:
   db:
     image: postgres:latest
-    container_name: "postgresdb"
+    container_name: postgres-db
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
-    ports:
-      - 5433:5432
+#    ports:
+#      - 5433:5432
     environment:
       - POSTGRES_DB=ds-internship-control-system
       - POSTGRES_PASSWORD="secret"
@@ -24,5 +24,17 @@ services:
       - PGADMIN_DEFAULT_EMAIL=ivakin_danya@mail.ru
       - PGADMIN_DEFAULT_PASSWORD=secretpass
     depends_on:
-      db:
-        condition: service_started
+      - db
+
+  app:
+    image: ds-internship-control-system
+    container_name: ds-internship-control-system
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/ds-internship-control-system

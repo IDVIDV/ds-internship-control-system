@@ -1,0 +1,3 @@
+CREATE TABLE test_table2(
+    "id" SERIAL PRIMARY KEY
+)
