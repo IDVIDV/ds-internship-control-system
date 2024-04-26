@@ -1,0 +1,3 @@
+INSERT INTO "role"
+VALUES (DEFAULT, 'ADMIN'),
+       (DEFAULT, 'USER');

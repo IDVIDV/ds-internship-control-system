@@ -1,0 +1,3 @@
+INSERT INTO "user"
+VALUES (DEFAULT, 'user1', '$2a$10$z5yKIS7bXEPVLcLu4T9HQunMNk3JE5umzL.C4cHJg9pogTRP0lMNW', 'abc', 'string', 'string1', 'string', 'string', 'string', 'string', 'string', 0, (SELECT role_id FROM role WHERE role = 'USER')),
+       (DEFAULT, 'admin1', '$2a$10$/.PcRjNTMiOlkuLGjEFKceJT7QvWXWchkqr1kPDbltR91k23sPPbi', 'string2', 'string', 'string2', 'string2', 'string', 'string', 'string', 'string', 0, (SELECT role_id FROM role WHERE role = 'ADMIN'));
