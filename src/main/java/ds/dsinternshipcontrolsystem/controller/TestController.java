@@ -1,9 +1,11 @@
 package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.entity.User;
+import ds.dsinternshipcontrolsystem.service.GitlabService;
 import ds.dsinternshipcontrolsystem.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,17 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
+    private final GitlabService gitlabService;
     private final UserService userService;
 
     @Autowired
-    public TestController(UserService userService) {
+    public TestController(UserService userService, GitlabService gitlabService) {
         this.userService = userService;
+        this.gitlabService = gitlabService;
     }
 
     @ApiOperation(value = "admin test")
     @GetMapping("/admin")
     private String adminTest(Model model) {
-        return "1";
+        return gitlabService.test();
     }
 
     @ApiOperation(value = "user test")
