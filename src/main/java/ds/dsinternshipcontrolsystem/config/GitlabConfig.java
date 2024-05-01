@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GitlabConfig {
-    @Value("${GITLAB_URL}")
+    @Value("${GITLAB_URL:http://localhost:9877}")
     private String gitlabUrl;
-    @Value("${GITLAB_PASSWORD}")
+    @Value("${GITLAB_PASSWORD:ivakin_danya}")
     private String gitlabPassword;
     private String gitlabUser = "root";
     @Bean
