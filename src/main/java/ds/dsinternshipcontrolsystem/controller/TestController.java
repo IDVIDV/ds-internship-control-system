@@ -42,13 +42,4 @@ public class TestController {
         return "3";
     }
 
-    @PostMapping("/registration")
-    public String addUser(@RequestBody User user, Model model) {
-
-        if (!userService.saveUser(user)){
-            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
-        }
-
-        return "OK";
-    }
 }

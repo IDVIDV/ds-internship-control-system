@@ -1,7 +1,6 @@
 package ds.dsinternshipcontrolsystem.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,7 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    private Integer role_id;
+    private Integer roleId;
     private String role;
     @Override
     public String getAuthority() {
