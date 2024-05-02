@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,9 +47,13 @@ public class User implements UserDetails {
     private String faculty;
     private String specialization;
     private Integer course;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+    @OneToMany(mappedBy = "user")
+    private List<TaskFork> taskForks;
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
