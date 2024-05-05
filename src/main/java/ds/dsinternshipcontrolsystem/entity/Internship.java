@@ -1,5 +1,6 @@
 package ds.dsinternshipcontrolsystem.entity;
 
+import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,15 +29,16 @@ public class Internship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "internship_id")
-    private Integer internshipId;
+    private Integer id;
     @Column(name = "internship_name")
     private String internshipName;
     private String description;
     @Column(name = "start_date")
-    private Timestamp start_date;
+    private Timestamp startDate;
     @Column(name = "sign_end_date")
     private Timestamp signEndDate;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private InternshipStatus status;
     @OneToMany(mappedBy = "internship", fetch = FetchType.LAZY)
     private List<UserInternship> userInternships;
     @OneToMany(mappedBy = "internship", fetch = FetchType.LAZY)

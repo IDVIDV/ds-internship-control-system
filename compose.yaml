@@ -6,12 +6,14 @@ services:
     container_name: postgres-db
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
 #    ports:
 #      - 5433:5432
-    environment:
-      - POSTGRES_DB=ds-internship-control-system
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_USER=ivakin_danya
+#    environment:
+#      - POSTGRES_DB=ds-internship-control-system
+#      - POSTGRES_PASSWORD=secret
+#      - POSTGRES_USER=ivakin_danya
 
   pg-admin:
     image: dpage/pgadmin4
@@ -20,9 +22,11 @@ services:
       - ./data/pgadmin:/var/lib/pgadmin
     ports:
       - 8088:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=ivakin_danya@mail.ru
-      - PGADMIN_DEFAULT_PASSWORD=secretpass
+    env_file:
+      - .env
+#    environment:
+#      - PGADMIN_DEFAULT_EMAIL=ivakin_danya@mail.ru
+#      - PGADMIN_DEFAULT_PASSWORD=secretpass
     depends_on:
       - db
 
@@ -69,7 +73,11 @@ services:
         condition: service_started
       gitlab-ce:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
       - GITLAB_PASSWORD=${GITLAB_INIT_PASSWORD}
-      - GITLAB_URL=${GITLAB_URL}
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+#      - GITLAB_URL=${GITLAB_URL}
+#      - GITLAB_PUSH_HOOK_URL=${GITLAB_PUSH_HOOK_URL}
+#      - GITLAB_PUSH_HOOK_SECRET_TOKEN=${GITLAB_PUSH_HOOK_SECRET_TOKEN}
+#      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}

@@ -1,5 +1,6 @@
 package ds.dsinternshipcontrolsystem.entity;
 
+import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,5 +34,6 @@ public class UserInternship {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserInternshipStatus status;
 }

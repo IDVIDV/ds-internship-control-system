@@ -1,7 +1,6 @@
 package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.RegisterUser;
-import ds.dsinternshipcontrolsystem.entity.User;
 import ds.dsinternshipcontrolsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -19,12 +18,10 @@ public class PublicController {
     }
 
     @PostMapping("/register")
-    public String addUser(@RequestBody RegisterUser registerUser, Model model) {
+    public void register(@RequestBody RegisterUser registerUser, Model model) {
 
         if (!userService.registerUser(registerUser)) {
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
         }
-
-        return "OK";
     }
 }

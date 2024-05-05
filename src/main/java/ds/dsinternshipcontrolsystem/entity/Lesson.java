@@ -26,7 +26,7 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lesson_id")
-    private Integer lessonId;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "internship_id", nullable = false)
     private Internship internship;

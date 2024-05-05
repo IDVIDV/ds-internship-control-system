@@ -26,7 +26,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
-    private Integer taskId;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "lesson_id", nullable = false)
     private Lesson lesson;

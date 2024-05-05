@@ -27,7 +27,7 @@ public class Commit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "commit_id")
-    private Integer commitId;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "task_fork_id", nullable = false)
     private TaskFork taskFork;

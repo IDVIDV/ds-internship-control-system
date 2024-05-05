@@ -26,7 +26,7 @@ public class TaskFork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_fork_id")
-    private Integer taskForkId;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;

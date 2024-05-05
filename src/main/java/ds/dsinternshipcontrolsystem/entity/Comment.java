@@ -24,7 +24,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Integer commentId;
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
