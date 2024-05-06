@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private String specialization;
     private Integer course;
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<TaskFork> taskForks;

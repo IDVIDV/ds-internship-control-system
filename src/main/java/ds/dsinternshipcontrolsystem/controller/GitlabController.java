@@ -11,25 +11,6 @@ public class GitlabController {
     @Value("${GITLAB_PUSH_HOOK_SECRET_TOKEN:secret-token}")
     private String pushEventSecretToken;
 
-//    @PostMapping("/test-git-repupdate")
-//    public void testRepUpdate(@RequestBody RepositoryChange str) {
-//        System.out.println("REPUPDATE");
-//        System.out.println(str);
-//        System.out.println();
-//        System.out.println();
-////        System.out.println(pushEvent);
-////        System.out.println(repChangeEvent);
-//    }
-//
-//    @PostMapping("/test-git-push")
-//    public void testPush(@RequestBody PushEvent str){
-//        System.out.println("PUSH");
-//        System.out.println(str);
-//        System.out.println();
-//        System.out.println();
-////        System.out.println(repChangeEvent);
-//    }
-
     @PostMapping("/gitlab/push-event")
     public String onPushEvent(@RequestBody PushEvent pushEvent) {
         if (!pushEvent.getRequestSecretToken().equals(pushEventSecretToken)) {

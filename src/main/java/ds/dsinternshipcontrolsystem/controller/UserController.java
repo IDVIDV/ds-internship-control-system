@@ -19,20 +19,17 @@ import javax.validation.constraints.Min;
 public class UserController {
     @Autowired
     private UserService userService;
-    @PostMapping("/sign-in-internship/{id}")
+
+    @PostMapping("/internship/{id}/register")
     public void signInInternship(@Min(1) @PathVariable("id") Integer internshipId) {
         userService.signInInternship(internshipId);
     }
+
     public void getMessages() {}
 
     public void getPerformance() {
 
     }
-
-//    @GetMapping("/user/test")
-//    public void test() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//    }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

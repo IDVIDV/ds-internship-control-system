@@ -26,10 +26,12 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "internship")
 public class Internship {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "internship_id")
     private Integer id;
+
     @Column(name = "internship_name")
     private String internshipName;
     private String description;
