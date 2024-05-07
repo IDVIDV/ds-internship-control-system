@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LessonDto {
-    private Integer id;
-    private Integer internshipId;
-    private String lessonName;
+public class AddTask {
+    private Integer lessonId;
+    private String taskName;
     private String description;
-    private List<TaskDto> taskDtoList;
+    private String url;
 }
