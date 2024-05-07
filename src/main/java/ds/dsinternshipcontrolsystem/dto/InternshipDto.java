@@ -18,5 +18,5 @@ public class InternshipDto {
     private Timestamp startDate;
     private Timestamp signEndDate;
     private InternshipStatus status;
-    private List<LessonDto> lessonDtos;
+    private List<LessonDto> lessonDtoList;
 }

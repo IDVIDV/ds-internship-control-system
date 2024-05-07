@@ -1,5 +1,6 @@
 package ds.dsinternshipcontrolsystem.service;
 
+import ds.dsinternshipcontrolsystem.dto.MessageDto;
 import ds.dsinternshipcontrolsystem.dto.RegisterUser;
 import ds.dsinternshipcontrolsystem.entity.Internship;
 import ds.dsinternshipcontrolsystem.entity.Role;
@@ -9,10 +10,11 @@ import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
 import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
 import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
+import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
+import ds.dsinternshipcontrolsystem.mapper.UserMapper;
 import ds.dsinternshipcontrolsystem.repository.InternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.UserRepository;
-import ds.dsinternshipcontrolsystem.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final MessageService messageService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -43,19 +47,17 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public boolean registerUser(RegisterUser registerUser) {
+    public void registerUser(RegisterUser registerUser) {
         User foundUser = userRepository.findByUsername(registerUser.getUsername());
 
         if (foundUser != null) {
-            return false;
+            throw new UserAlreadyRegisteredException("Username is taken");
         }
 
         User user = userMapper.toUser(registerUser);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(new Role(2, "USER"));
         userRepository.save(user);
-
-        return true;
     }
 
     public void signInInternship(Integer internshipId) {
@@ -68,7 +70,6 @@ public class UserService implements UserDetailsService {
         if (!internship.getStatus().equals(InternshipStatus.REGISTRY)) {
             throw new InternshipRegistryClosedException("Internship is not opened for registry");
         }
-
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -95,6 +96,16 @@ public class UserService implements UserDetailsService {
         }
 
         userInternshipRepository.save(userInternshipToSave);
+    }
+
+    public List<MessageDto> getMessages() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user == null) {
+            throw new EntityNotFoundException("User not authenticated");
+        }
+
+        return messageService.getMessagesByReceiverId(user.getId());
     }
 }
 

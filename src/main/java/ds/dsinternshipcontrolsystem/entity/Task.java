@@ -33,6 +33,7 @@ public class Task {
     @Column(name = "task_name")
     private String taskName;
     private String description;
+    private String url;
     @OneToMany(mappedBy = "task")
     private List<TaskFork> taskForks;
 }

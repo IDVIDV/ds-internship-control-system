@@ -34,6 +34,7 @@ public class TaskFork {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private Boolean accepted;
+    private String url;
     @OneToMany(mappedBy = "taskFork")
     private List<Commit> commits;
 }
