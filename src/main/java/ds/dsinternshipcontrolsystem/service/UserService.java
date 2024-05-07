@@ -78,7 +78,7 @@ public class UserService implements UserDetailsService {
         }
 
         UserInternship userInternship = userInternshipRepository
-                .findUserInternshipByInternshipIdAndUserId(user.getId(), internshipId);
+                .findByInternshipIdAndUserId(user.getId(), internshipId);
         UserInternship userInternshipToSave;
 
         if (userInternship != null) {

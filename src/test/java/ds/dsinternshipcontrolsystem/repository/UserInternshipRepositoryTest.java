@@ -6,6 +6,7 @@ import ds.dsinternshipcontrolsystem.entity.User;
 import ds.dsinternshipcontrolsystem.entity.UserInternship;
 import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
 import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
+import ds.dsinternshipcontrolsystem.repository.projection.UserOnly;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -74,15 +78,27 @@ public class UserInternshipRepositoryTest {
     }
 
     @Test
-    void getUserInternshipByInternshipIdAndUserid() {
-        Internship internship1 = new Internship();
-        internship1.setId(1);
-        UserInternship userInternship = new UserInternship(null, internship1,
+    void findByInternshipIdAndUserIdTest() {
+        UserInternship userInternship = new UserInternship(null, internship,
                 user, UserInternshipStatus.JOINED);
         userInternshipRepository.save(userInternship);
 
         assertThat(userInternshipRepository
-                .findUserInternshipByInternshipIdAndUserId(internship.getId(), user.getId()))
+                .findByInternshipIdAndUserId(internship.getId(), user.getId()))
                 .isEqualTo(userInternship);
+    }
+
+    @Test
+    void findAllUserIdByInternshipIdTest() {
+        UserInternship userInternship = new UserInternship(null, internship,
+                user, UserInternshipStatus.JOINED);
+        userInternshipRepository.save(userInternship);
+
+        List<User> expected = new ArrayList<>();
+        expected.add(user);
+
+        assertThat(userInternshipRepository.findAllByInternshipId(internship.getId())
+                .stream().map(UserOnly::getUser).collect(Collectors.toList()))
+                .isEqualTo(expected);
     }
 }

@@ -2,17 +2,21 @@ package ds.dsinternshipcontrolsystem.service;
 
 import ds.dsinternshipcontrolsystem.dto.AddLesson;
 import ds.dsinternshipcontrolsystem.dto.LessonDto;
+import ds.dsinternshipcontrolsystem.entity.Internship;
 import ds.dsinternshipcontrolsystem.entity.Lesson;
 import ds.dsinternshipcontrolsystem.mapper.LessonMapper;
+import ds.dsinternshipcontrolsystem.repository.InternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LessonService {
+    private final InternshipRepository internshipRepository;
     private final LessonMapper lessonMapper;
     private final LessonRepository lessonRepository;
 
@@ -21,6 +25,12 @@ public class LessonService {
     }
 
     public void addLesson(AddLesson addLesson) {
+        Internship internship = internshipRepository.findById(addLesson.getInternshipId()).orElse(null);
+
+        if (internship == null) {
+            throw new EntityNotFoundException("Internship with given id does not exist");
+        }
+
         Lesson lesson = lessonMapper.toLesson(addLesson);
         lessonRepository.save(lesson);
     }

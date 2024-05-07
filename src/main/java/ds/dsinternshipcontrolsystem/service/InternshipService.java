@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -18,6 +19,7 @@ import java.util.List;
 public class InternshipService {
     private final InternshipRepository internshipRepository;
     private final InternshipMapper internshipMapper;
+    private final TaskForkService taskForkService;
 
     public List<InternshipDto> getAllInternships() {
         return internshipMapper.toInternshipDtoList(internshipRepository.findAll());
@@ -46,6 +48,7 @@ public class InternshipService {
         internshipRepository.save(internship);
     }
 
+    @Transactional
     public void startInternship(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
@@ -60,7 +63,7 @@ public class InternshipService {
 
         internship.setStatus(InternshipStatus.IN_PROGRESS);
 
-        //TODO создать форки для юзеров
+        taskForkService.createForksOnInternshipStart(internship);
 
         internshipRepository.save(internship);
     }
@@ -78,9 +81,6 @@ public class InternshipService {
         }
 
         internship.setStatus(InternshipStatus.CLOSED);
-
-        //TODO создать форки для юзеров
-
         internshipRepository.save(internship);
     }
 }
