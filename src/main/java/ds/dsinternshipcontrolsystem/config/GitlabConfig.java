@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.config;
 
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.SystemHook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,12 @@ public class GitlabConfig {
                 .anyMatch(hook -> hook.getUrl().equals(pushEventUrl));
 
         if (!hookExists) {
-            gitLabApi.getSystemHooksApi().addSystemHook(pushEventUrl, pushEventSecretToken,
-                    true, false, true);
+            SystemHook systemHook = new SystemHook()
+                    .withPushEvents(true)
+                    .withEnableSslVerification(true)
+                    .withRepositoryUpdateEvents(false);
+
+            gitLabApi.getSystemHooksApi().addSystemHook(pushEventUrl, pushEventSecretToken, systemHook);
         }
 
         return gitLabApi;

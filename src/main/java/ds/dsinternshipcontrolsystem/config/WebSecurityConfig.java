@@ -18,6 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
+    //TODO закрыть эндпоинты после их реализации
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

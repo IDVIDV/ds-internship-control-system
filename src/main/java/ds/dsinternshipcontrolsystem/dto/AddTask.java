@@ -12,4 +12,5 @@ public class AddTask {
     private String taskName;
     private String description;
     private String url;
+    private String path;
 }

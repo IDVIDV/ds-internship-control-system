@@ -28,9 +28,9 @@ public class GitlabService {
 
         for (Task task : tasks) {
             Project fork = gitLabApi.getProjectApi()
-                    .forkProject(task.getUrl(), gitlabUser.getNamespaceId());
+                    .forkProject(task.getPath(), gitlabUser.getNamespaceId());
             TaskFork taskFork = new TaskFork(null, task, user,
-                    false, fork.getHttpUrlToRepo(), null);
+                    false, fork.getWebUrl(), null);
             taskForks.add(taskFork);
         }
 
@@ -50,6 +50,6 @@ public class GitlabService {
                 .withUsername(user.getUsername())
                 .withName(user.getFullName());
 
-        return gitLabApi.getUserApi().createUser(gitlabUser, null, true);
+        return gitLabApi.getUserApi().createUser(gitlabUser, user.getUsername(), true);
     }
 }

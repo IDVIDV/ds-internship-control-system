@@ -34,6 +34,7 @@ public class Task {
     private String taskName;
     private String description;
     private String url;
+    private String path;
     @OneToMany(mappedBy = "task")
     private List<TaskFork> taskForks;
 }
