@@ -32,7 +32,8 @@ public class TaskController {
             example = "1",
             paramType = "path"
     )
-    public ResponseEntity<List<TaskDto>> getAllTaskByLessonId(@PathVariable(name = "lessonId") Integer lessonId) {
+    public ResponseEntity<List<TaskDto>> getAllTasksByLessonId(
+            @PathVariable(name = "lessonId") Integer lessonId) {
         return new ResponseEntity<>(taskService.getAllTasksByLessonId(lessonId), HttpStatus.OK);
     }
 
@@ -44,8 +45,8 @@ public class TaskController {
             example = "1",
             paramType = "path"
     )
-    public void addTask(@RequestBody AddTask addTask,
-                        @PathVariable(name = "lessonId") Integer lessonId) {
+    public void addTaskToLesson(@RequestBody AddTask addTask,
+                                @PathVariable(name = "lessonId") Integer lessonId) {
         addTask.setLessonId(lessonId);
         taskService.addTask(addTask);
     }

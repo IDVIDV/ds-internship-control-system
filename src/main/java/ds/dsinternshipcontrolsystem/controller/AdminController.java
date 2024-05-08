@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminController {
 
-    public void getUncheckedCommits() {
-    }
-
     public void markCommit() {
     }
 

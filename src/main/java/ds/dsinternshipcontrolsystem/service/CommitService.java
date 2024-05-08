@@ -1,7 +1,9 @@
 package ds.dsinternshipcontrolsystem.service;
 
+import ds.dsinternshipcontrolsystem.dto.CommitDto;
 import ds.dsinternshipcontrolsystem.entity.Commit;
 import ds.dsinternshipcontrolsystem.entity.TaskFork;
+import ds.dsinternshipcontrolsystem.mapper.CommitMapper;
 import ds.dsinternshipcontrolsystem.repository.CommitRepository;
 import ds.dsinternshipcontrolsystem.repository.TaskForkRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class CommitService {
     private final TaskForkRepository taskForkRepository;
     private final CommitRepository commitRepository;
+    private final CommitMapper commitMapper;
 
     public void handlePushEvent(PushEvent pushEvent) {
         pushEvent.getProject();
@@ -47,5 +50,10 @@ public class CommitService {
         }
 
         commitRepository.saveAll(commitsToSave);
+    }
+
+    public List<CommitDto> getAllLatestUncheckedCommits(Integer lessonId) {
+        return commitMapper.toCommitDtoList(commitRepository
+                .findAllLatestUncheckedCommitsByLessonId(lessonId));
     }
 }
