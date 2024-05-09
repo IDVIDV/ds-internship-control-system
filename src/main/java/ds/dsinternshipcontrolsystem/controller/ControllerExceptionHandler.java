@@ -1,5 +1,6 @@
 package ds.dsinternshipcontrolsystem.controller;
 
+import ds.dsinternshipcontrolsystem.exception.ForkFailedException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
 import ds.dsinternshipcontrolsystem.exception.WrongInternshipStatusException;
@@ -40,6 +41,12 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(UserAlreadyRegisteredException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleUserAlreadyRegisteredException(UserAlreadyRegisteredException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(ForkFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleForkFailedExceptionException(ForkFailedException e) {
         return e.getMessage();
     }
 }

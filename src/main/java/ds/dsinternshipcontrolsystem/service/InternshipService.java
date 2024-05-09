@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -58,7 +57,6 @@ public class InternshipService {
         internshipRepository.save(internship);
     }
 
-    @Transactional
     public void startInternship(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 

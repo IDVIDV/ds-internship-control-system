@@ -12,6 +12,7 @@ import java.util.List;
 public interface LessonMapper {
     @Mapping(target = "internshipId", source = "internship.id")
     LessonDto toLessonDto(Lesson lesson);
+
     List<LessonDto> toLessonDtoList(List<Lesson> lessonList);
 
     @Mapping(target = "internship",

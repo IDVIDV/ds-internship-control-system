@@ -1,6 +1,7 @@
 package ds.dsinternshipcontrolsystem.service;
 
 import ds.dsinternshipcontrolsystem.dto.MessageDto;
+import ds.dsinternshipcontrolsystem.dto.Performance;
 import ds.dsinternshipcontrolsystem.dto.RegisterUser;
 import ds.dsinternshipcontrolsystem.entity.Internship;
 import ds.dsinternshipcontrolsystem.entity.Role;
@@ -11,8 +12,10 @@ import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
 import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
+import ds.dsinternshipcontrolsystem.mapper.TaskForkMapper;
 import ds.dsinternshipcontrolsystem.mapper.UserMapper;
 import ds.dsinternshipcontrolsystem.repository.InternshipRepository;
+import ds.dsinternshipcontrolsystem.repository.TaskForkRepository;
 import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,8 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final MessageService messageService;
+    private final TaskForkRepository taskForkRepository;
+    private final TaskForkMapper taskForkMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,7 +61,7 @@ public class UserService implements UserDetailsService {
 
         User user = userMapper.toUser(registerUser);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(new Role(2, "USER"));
+        user.setRole(Role.USER);
         userRepository.save(user);
     }
 
@@ -96,6 +101,16 @@ public class UserService implements UserDetailsService {
         }
 
         userInternshipRepository.save(userInternshipToSave);
+    }
+
+    public List<Performance> getPerformance() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user == null) {
+            throw new EntityNotFoundException("User not authenticated");
+        }
+
+        return taskForkMapper.toPerformanceList(taskForkRepository.findAllByUserId(user.getId()));
     }
 
     public List<MessageDto> getMessages() {

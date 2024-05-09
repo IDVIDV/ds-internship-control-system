@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("internships/{internshipId}/lessons/{lessonId}")
+@RequestMapping("/internships/{internshipId}/lessons/{lessonId}")
 @ApiImplicitParams({
         @ApiImplicitParam(
                 name = "internshipId",

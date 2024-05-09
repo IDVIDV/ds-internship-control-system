@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface TaskForkRepository extends JpaRepository<TaskFork, Integer> {
     TaskFork findByUrl(String Url);
+
     List<TaskFork> findAllByTaskId(Integer taskId);
+
+    List<TaskFork> findAllByUserId(Integer userId);
 }

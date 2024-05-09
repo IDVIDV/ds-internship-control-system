@@ -2,7 +2,9 @@ package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.AddInternship;
 import ds.dsinternshipcontrolsystem.dto.InternshipDto;
+import ds.dsinternshipcontrolsystem.dto.Report;
 import ds.dsinternshipcontrolsystem.service.InternshipService;
+import ds.dsinternshipcontrolsystem.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequestMapping("/internships")
 public class InternshipController {
     private final InternshipService internshipService;
+    private final ReportService reportService;
 
     @GetMapping
     public ResponseEntity<List<InternshipDto>> getAllInternships() {
@@ -56,7 +59,7 @@ public class InternshipController {
     }
 
     @GetMapping("/{internshipId}/report")
-    public ResponseEntity getReport(@PathVariable(name = "internshipId") Integer internshipId) {
-        return null;
+    public ResponseEntity<Report> getReport(@PathVariable(name = "internshipId") Integer internshipId) {
+        return new ResponseEntity<>(reportService.getReport(internshipId), HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.MessageDto;
+import ds.dsinternshipcontrolsystem.dto.Performance;
 import ds.dsinternshipcontrolsystem.dto.RegisterUser;
 import ds.dsinternshipcontrolsystem.service.UserService;
 import io.swagger.annotations.ApiParam;
@@ -35,8 +36,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getMessages(), HttpStatus.OK);
     }
 
-    public void getPerformance() {
-
+    @GetMapping("/user/performance")
+    public ResponseEntity<List<Performance>> getPerformance() {
+        return new ResponseEntity<>(userService.getPerformance(), HttpStatus.OK);
     }
 
     @PostMapping("/register")

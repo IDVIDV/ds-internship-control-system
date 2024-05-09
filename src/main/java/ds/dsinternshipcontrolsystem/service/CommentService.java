@@ -15,13 +15,15 @@ import java.util.List;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final MessageService messageService;
 
     public void addComment(AddComment addComment) {
         Comment comment = commentMapper.toComment(addComment);
         commentRepository.save(comment);
+        messageService.noteStudentOnCommitCheck(comment);
     }
 
-    public List<CommentDto> getAllCommentsByUserId(Integer userId) {
-        return commentMapper.toCommentDtoList(commentRepository.findAllByUserId(userId));
+    public List<CommentDto> getAllCommentsByCommitId(Integer commitId) {
+        return commentMapper.toCommentDtoList(commentRepository.findAllByCommitId(commitId));
     }
 }

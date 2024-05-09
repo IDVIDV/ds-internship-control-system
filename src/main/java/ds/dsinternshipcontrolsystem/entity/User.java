@@ -53,6 +53,8 @@ public class User implements UserDetails {
     private List<TaskFork> taskForks;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+    @OneToMany(mappedBy = "user")
+    private List<UserInternship> userInternships;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

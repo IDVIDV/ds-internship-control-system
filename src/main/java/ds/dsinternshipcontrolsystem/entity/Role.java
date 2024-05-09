@@ -20,6 +20,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Table(name = "role")
 public class Role implements GrantedAuthority {
+    public static final Role ADMIN = new Role(1, "ADMIN");
+    public static final Role USER = new Role(2, "USER");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")

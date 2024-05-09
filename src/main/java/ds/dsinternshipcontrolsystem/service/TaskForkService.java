@@ -6,6 +6,8 @@ import ds.dsinternshipcontrolsystem.entity.Lesson;
 import ds.dsinternshipcontrolsystem.entity.Task;
 import ds.dsinternshipcontrolsystem.entity.TaskFork;
 import ds.dsinternshipcontrolsystem.entity.User;
+import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
+import ds.dsinternshipcontrolsystem.exception.ForkFailedException;
 import ds.dsinternshipcontrolsystem.mapper.TaskForkMapper;
 import ds.dsinternshipcontrolsystem.repository.TaskForkRepository;
 import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
@@ -25,6 +27,7 @@ public class TaskForkService {
     private final TaskForkRepository taskForkRepository;
     private final UserInternshipRepository userInternshipRepository;
     private final TaskForkMapper taskForkMapper;
+    private final MessageService messageService;
 
     public List<TaskForkDto> getAllTaskForksByTaskId(Integer taskId) {
         return taskForkMapper.toTaskForkDtoList(taskForkRepository.findAllByTaskId(taskId));
@@ -38,6 +41,18 @@ public class TaskForkService {
         }
 
         return taskForkMapper.toTaskForkDto(taskFork);
+    }
+
+    public void acceptTaskFork(Integer taskForkId) {
+        TaskFork taskFork = taskForkRepository.findById(taskForkId).orElse(null);
+
+        if (taskFork == null) {
+            throw new EntityNotFoundException("TaskFork with given id does not exist");
+        }
+
+        taskFork.setAccepted(true);
+
+        taskForkRepository.save(taskFork);
     }
 
     public void createForksForTaskInOngoingInternship(Task task) {
@@ -61,19 +76,7 @@ public class TaskForkService {
         createForks(users, tasks);
     }
 
-    public void acceptTaskFork(Integer taskForkId) {
-        TaskFork taskFork = taskForkRepository.findById(taskForkId).orElse(null);
-
-        if (taskFork == null) {
-            throw new EntityNotFoundException("TaskFork with given id does not exist");
-        }
-
-        taskFork.setAccepted(true);
-
-        taskForkRepository.save(taskFork);
-    }
-
-    private void createForks(List<User> users, List<Task> tasks) {
+    public void createForks(List<User> users, List<Task> tasks) {
         try {
             List<TaskFork> taskForks = new ArrayList<>();
 
@@ -83,13 +86,13 @@ public class TaskForkService {
 
             taskForkRepository.saveAll(taskForks);
         } catch (Exception e) {
-            //TODO выслать всем админам сообщение
-            System.out.println("abc");
+            messageService.noticeAllAdminsOnForkFail(users, tasks, e.getMessage());
+            throw new ForkFailedException(e.getMessage());
         }
     }
 
     private List<User> getUsersInInternship(Integer internshipId) {
-        return userInternshipRepository.findAllByInternshipId(internshipId)
+        return userInternshipRepository.findAllByInternshipIdAndStatus(internshipId, UserInternshipStatus.JOINED)
                 .stream().map(UserOnly::getUser).collect(Collectors.toList());
     }
 }
