@@ -25,13 +25,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/register").not().authenticated()
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/internships").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/internships/*/end-registry").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/internships/*/start").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/internships/*/end").hasAuthority("ADMIN")
-                .antMatchers("/user/**").hasAnyAuthority("ADMIN", "USER")
-                .antMatchers(HttpMethod.POST, "/internship/*/register").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers(HttpMethod.POST,
+                        "/internships",
+                        "/internships/*/end-registry",
+                        "/internships/*/start",
+                        "/internships/*/end",
+                        "/internships/*/lessons",
+                        "/internships/*/lessons/*/unchecked-commits/**",
+                        "/internships/*/lessons/*/tasks",
+                        "/internships/*/lessons/*/tasks/*/task-forks/**")
+                .hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,
+                        "/internships/*/report",
+                        "/internships/*/lessons/*/unchecked-commits/**",
+                        "/internships/*/lessons/*/tasks/*/task-forks/**")
+                .hasAuthority("ADMIN")
+                .antMatchers("/user/**", "/internship/*/register").hasAnyAuthority("ADMIN", "USER")
                 .and().formLogin()
                 .and().httpBasic();
     }

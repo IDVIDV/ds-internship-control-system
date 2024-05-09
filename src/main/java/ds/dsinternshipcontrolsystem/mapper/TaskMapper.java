@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = TaskForkMapper.class)
 public interface TaskMapper {
     @Mapping(target = "lessonId", source = "lesson.id")
     TaskDto toTaskDto(Task task);

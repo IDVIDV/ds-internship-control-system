@@ -22,4 +22,6 @@ public interface CommitRepository extends JpaRepository<Commit, Integer> {
             "WHERE l.lesson_id = :lessonId AND tf.accepted = false",
             nativeQuery = true)
     List<Commit> findAllLatestUncheckedCommitsByLessonId(@Param("lessonId") Integer lessonId);
+
+    Commit findByIdAndTaskForkAccepted(Integer commitId, Boolean accepted);
 }

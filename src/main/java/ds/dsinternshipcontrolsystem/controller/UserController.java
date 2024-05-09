@@ -3,6 +3,7 @@ package ds.dsinternshipcontrolsystem.controller;
 import ds.dsinternshipcontrolsystem.dto.MessageDto;
 import ds.dsinternshipcontrolsystem.dto.RegisterUser;
 import ds.dsinternshipcontrolsystem.service.UserService;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/internship/{id}/register")
-    public void signInInternship(@Min(1) @PathVariable("id") Integer internshipId) {
+    public void signInInternship(@Min(1)
+                                 @ApiParam(name = "idTest", value = "Тест", type = "path")
+                                 @PathVariable("id") Integer internshipId) {
         userService.signInInternship(internshipId);
     }
 

@@ -9,11 +9,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDto {
+public class TaskForkDto {
     private Integer id;
-    private Integer lessonId;
-    private String taskName;
-    private String description;
+    private Integer taskId;
+    private Integer userId;
+    private Boolean accepted;
     private String url;
-    private List<TaskForkDto> taskForkDtoList;
+    private List<CommitDto> commitDtoList;
 }

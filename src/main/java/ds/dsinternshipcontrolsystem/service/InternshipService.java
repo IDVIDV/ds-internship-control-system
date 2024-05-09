@@ -25,6 +25,16 @@ public class InternshipService {
         return internshipMapper.toInternshipDtoList(internshipRepository.findAll());
     }
 
+    public InternshipDto getInternshipById(Integer internshipId) {
+        Internship internship = internshipRepository.findById(internshipId).orElse(null);
+
+        if (internship == null) {
+            throw new EntityNotFoundException("Internship with given id does not exist");
+        }
+
+        return internshipMapper.toInternshipDto(internship);
+    }
+
     public void addInternship(AddInternship addInternship) {
         Internship internship = internshipMapper.toInternship(addInternship);
         internship.setStatus(InternshipStatus.REGISTRY);

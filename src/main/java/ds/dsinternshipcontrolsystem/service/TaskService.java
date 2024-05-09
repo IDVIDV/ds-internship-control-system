@@ -26,6 +26,16 @@ public class TaskService {
         return taskMapper.toTaskDtoList(taskRepository.findAllByLessonId(lessonId));
     }
 
+    public TaskDto getTaskById(Integer taskId) {
+        Task task = taskRepository.findById(taskId).orElse(null);
+
+        if (task == null) {
+            throw new EntityNotFoundException("Task with given id does not exist");
+        }
+
+        return taskMapper.toTaskDto(task);
+    }
+
     public void addTask(AddTask addTask) {
         Lesson lesson = lessonRepository.findById(addTask.getLessonId()).orElse(null);
 

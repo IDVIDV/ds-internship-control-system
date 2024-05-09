@@ -24,6 +24,16 @@ public class LessonService {
         return lessonMapper.toLessonDtoList(lessonRepository.findAllByInternshipId(internshipId));
     }
 
+    public LessonDto getLessonById(Integer lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId).orElse(null);
+
+        if (lesson == null) {
+            throw new EntityNotFoundException("Lesson with given id does not exist");
+        }
+
+        return lessonMapper.toLessonDto(lesson);
+    }
+
     public void addLesson(AddLesson addLesson) {
         Internship internship = internshipRepository.findById(addLesson.getInternshipId()).orElse(null);
 
