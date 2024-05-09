@@ -33,15 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserInternshipRepositoryTest {
     @Container
     private static final PostgreSQLContainer<?> postgres = (PostgreSQLContainer)
-            new PostgreSQLContainer("postgres").withReuse(true);
-
-    static {
-        postgres.start();
-    }
+            new PostgreSQLContainer<>("postgres").withReuse(true);
 
     @DynamicPropertySource
     private static void configurePostgreSQLProperties(DynamicPropertyRegistry registry) {
-        postgres.start();
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
@@ -56,7 +51,7 @@ public class UserInternshipRepositoryTest {
 
     private final User user = new User(null, "user", "pass", "mail", "fullName",
             "phone", "telegram", "s", "s", "s", "s",
-            1, new Role(1, "USER"), null, null);
+            1, new Role(1, "USER"), null, null, null);
     private final Internship internship = new Internship(null, "name", "desc",
             Timestamp.valueOf(LocalDateTime.now().plusDays(7)),
             Timestamp.valueOf(LocalDateTime.now()),
@@ -97,7 +92,8 @@ public class UserInternshipRepositoryTest {
         List<User> expected = new ArrayList<>();
         expected.add(user);
 
-        assertThat(userInternshipRepository.findAllByInternshipId(internship.getId())
+        assertThat(userInternshipRepository.findAllByInternshipIdAndStatus(internship.getId(),
+                        UserInternshipStatus.JOINED)
                 .stream().map(UserOnly::getUser).collect(Collectors.toList()))
                 .isEqualTo(expected);
     }
