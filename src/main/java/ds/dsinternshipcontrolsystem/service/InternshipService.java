@@ -60,7 +60,6 @@ public class InternshipService {
         }
 
         internship.setStatus(InternshipStatus.AWAITING_START);
-
         internshipRepository.save(internship);
     }
 
@@ -76,10 +75,9 @@ public class InternshipService {
                     InternshipStatus.AWAITING_START));
         }
 
-        internship.setStatus(InternshipStatus.IN_PROGRESS);
-
         taskForkService.createForksOnInternshipStart(internship);
 
+        internship.setStatus(InternshipStatus.IN_PROGRESS);
         internshipRepository.save(internship);
     }
 
@@ -95,8 +93,8 @@ public class InternshipService {
                     InternshipStatus.IN_PROGRESS));
         }
 
-        internship.setStatus(InternshipStatus.CLOSED);
-        internshipRepository.save(internship);
+//        internship.setStatus(InternshipStatus.CLOSED);
+//        internshipRepository.save(internship);
 
         List<User> usersInInternship = userInternshipRepository
                 .findAllByInternshipIdAndStatus(internship.getId(), UserInternshipStatus.JOINED)
@@ -105,5 +103,8 @@ public class InternshipService {
                 .collect(Collectors.toList());
 
         archiveService.archiveUsersInInternship(usersInInternship, internship);
+
+        internship.setStatus(InternshipStatus.CLOSED);
+        internshipRepository.save(internship);
     }
 }

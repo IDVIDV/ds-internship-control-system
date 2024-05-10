@@ -44,8 +44,8 @@ public class TaskService {
         }
 
         Task task = taskMapper.toTask(addTask);
-        taskRepository.save(task);
         task.setLesson(lesson);
+        taskRepository.save(task);
 
         if (lesson.getInternship().getStatus().equals(InternshipStatus.IN_PROGRESS)) {
             taskForkService.createForksForTaskInOngoingInternship(task);

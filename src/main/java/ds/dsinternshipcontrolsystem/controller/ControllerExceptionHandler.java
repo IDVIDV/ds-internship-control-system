@@ -4,6 +4,7 @@ import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
 import ds.dsinternshipcontrolsystem.exception.AlreadyLeftException;
 import ds.dsinternshipcontrolsystem.exception.ForkFailedException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
+import ds.dsinternshipcontrolsystem.exception.UnauthorizedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
 import ds.dsinternshipcontrolsystem.exception.WrongInternshipStatusException;
 import org.springframework.http.HttpHeaders;
@@ -75,6 +76,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AlreadyLeftException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleAlreadyLeftException(AlreadyLeftException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleUnauthorizedException(UnauthorizedException e) {
         return e.getMessage();
     }
 

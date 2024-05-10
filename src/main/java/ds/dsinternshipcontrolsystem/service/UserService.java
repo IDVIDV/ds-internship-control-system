@@ -12,6 +12,7 @@ import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
 import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
 import ds.dsinternshipcontrolsystem.exception.AlreadyLeftException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
+import ds.dsinternshipcontrolsystem.exception.UnauthorizedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
 import ds.dsinternshipcontrolsystem.mapper.TaskForkMapper;
 import ds.dsinternshipcontrolsystem.mapper.UserMapper;
@@ -79,13 +80,7 @@ public class UserService implements UserDetailsService {
             throw new InternshipRegistryClosedException("Internship is not opened for registry");
         }
 
-        User user;
-
-        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            throw new EntityNotFoundException("User not authenticated");
-        } else {
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        }
+        User user = getAuthenticatedUser();
 
         UserInternship userInternship = userInternshipRepository
                 .findByInternshipIdAndUserId(internshipId, user.getId());
@@ -115,13 +110,7 @@ public class UserService implements UserDetailsService {
             throw new EntityNotFoundException("Internship with given id does not exist");
         }
 
-        User user;
-
-        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            throw new EntityNotFoundException("User not authenticated");
-        } else {
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        }
+        User user = getAuthenticatedUser();
 
         UserInternship userInternship = userInternshipRepository
                 .findByInternshipIdAndUserId(internshipId, user.getId());
@@ -151,23 +140,23 @@ public class UserService implements UserDetailsService {
     }
 
     public List<Performance> getPerformance() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (user == null) {
-            throw new EntityNotFoundException("User not authenticated");
-        }
+        User user = getAuthenticatedUser();
 
         return taskForkMapper.toPerformanceList(taskForkRepository.findAllByUserId(user.getId()));
     }
 
     public List<MessageDto> getMessages() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (user == null) {
-            throw new EntityNotFoundException("User not authenticated");
-        }
+        User user = getAuthenticatedUser();
 
         return messageService.getMessagesByReceiverId(user.getId());
+    }
+
+    private User getAuthenticatedUser() {
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            throw new UnauthorizedException("User is not authenticated");
+        } else {
+            return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }
     }
 }
 
