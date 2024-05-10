@@ -10,11 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    @Mapping(target = "user",
-            expression = "java(new ds.dsinternshipcontrolsystem.entity." +
-                    "User(addComment.getUserId(), null, null, null, null, null, " +
-                    "null, null, null, null, null, null, null, null, null, null))"
-    )
+//    @Mapping(target = "user",
+//            expression = "java(new ds.dsinternshipcontrolsystem.entity." +
+//                    "User(addComment.getUserId(), null, null, null, null, null, " +
+//                    "null, null, null, null, null, null, null, null, null, null))"
+//    )
     @Mapping(target = "commit",
             expression = "java(new ds.dsinternshipcontrolsystem.entity." +
                     "Commit(addComment.getCommitId(), null, null, null, null, null))"

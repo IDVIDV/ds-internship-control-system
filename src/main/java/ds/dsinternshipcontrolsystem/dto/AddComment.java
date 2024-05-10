@@ -13,13 +13,13 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @ApiModel(description = "Данные, необходимые для добавления нового комментария")
 public class AddComment {
-    @ApiModelProperty(
-            name = "User Id", //Этот параметр вообще никак не отображается, поэтому далее я его указывать не буду
-            example = "1",
-            value = "Id пользователя, которому отправляется комментарий"
-    )
-    @Min(value = 1, message = "Id пользователя не может быть меньше 1")
-    private Integer userId;
+//    @ApiModelProperty(
+//            name = "User Id", //Этот параметр вообще никак не отображается, поэтому далее я его указывать не буду
+//            example = "1",
+//            value = "Id пользователя, которому отправляется комментарий"
+//    )
+//    @Min(value = 1, message = "Id пользователя не может быть меньше 1")
+//    private Integer userId;
 
     @ApiModelProperty(
             example = "1",

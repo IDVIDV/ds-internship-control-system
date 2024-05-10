@@ -14,6 +14,7 @@ import org.gitlab4j.api.models.Project;
 import org.gitlab4j.api.webhook.EventCommit;
 import org.gitlab4j.api.webhook.EventRepository;
 import org.gitlab4j.api.webhook.PushEvent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -26,6 +27,9 @@ public class GitlabService {
     private final CommitRepository commitRepository;
     private final TaskForkRepository taskForkRepository;
     private final GitLabApi gitLabApi;
+
+    @Value("${GITLAB_USER_PASSWORD:d7NTEU4RjG3bwWua}")
+    private String gitlabDefaultUserPassword;
 
     public void handlePushEvent(PushEvent pushEvent) {
         EventRepository eventRepository = pushEvent.getRepository();
@@ -81,7 +85,7 @@ public class GitlabService {
         org.gitlab4j.api.models.User gitlabUser = gitLabApi.getUserApi().getUser(user.getUsername());
 
         if (gitlabUser != null) {
-            return gitlabUser; //Пользователь уже имеет аккаунт в gitlab
+            return gitlabUser;
         }
 
         gitlabUser = new org.gitlab4j.api.models.User()
@@ -90,6 +94,8 @@ public class GitlabService {
                 .withUsername(user.getUsername())
                 .withName(user.getFullName());
 
-        return gitLabApi.getUserApi().createUser(gitlabUser, user.getUsername(), true);
+        return gitLabApi.getUserApi().createUser(gitlabUser,
+                gitlabDefaultUserPassword,
+                false);
     }
 }
