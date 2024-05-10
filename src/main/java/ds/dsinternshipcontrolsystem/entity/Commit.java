@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -37,4 +38,17 @@ public class Commit {
     private String url;
     @OneToMany(mappedBy = "commit")
     private List<Comment> comments;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Commit commit = (Commit) o;
+        return Objects.equals(id, commit.id) && Objects.equals(url, commit.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url);
+    }
 }

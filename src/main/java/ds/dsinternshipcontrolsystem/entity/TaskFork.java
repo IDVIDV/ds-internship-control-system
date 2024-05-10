@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -37,4 +38,17 @@ public class TaskFork {
     private String url;
     @OneToMany(mappedBy = "taskFork")
     private List<Commit> commits;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskFork taskFork = (TaskFork) o;
+        return Objects.equals(id, taskFork.id) && Objects.equals(url, taskFork.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url);
+    }
 }

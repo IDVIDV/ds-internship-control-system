@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -36,4 +37,17 @@ public class UserInternship {
     private User user;
     @Enumerated(EnumType.STRING)
     private UserInternshipStatus status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserInternship that = (UserInternship) o;
+        return Objects.equals(userInternshipId, that.userInternshipId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userInternshipId);
+    }
 }

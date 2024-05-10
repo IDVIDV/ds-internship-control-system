@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -43,4 +44,17 @@ public class Internship {
     private List<UserInternship> userInternships;
     @OneToMany(mappedBy = "internship", fetch = FetchType.LAZY)
     private List<Lesson> lessons;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Internship that = (Internship) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
