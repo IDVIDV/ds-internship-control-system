@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -36,19 +38,23 @@ public class LessonController {
 
     @GetMapping("/lessons")
     public ResponseEntity<List<LessonDto>> getAllLessonsByInternshipId(
-            @PathVariable(name = "internshipId") Integer internshipId) {
+            @Min(1)
+            @PathVariable(name = "internshipId")
+            Integer internshipId) {
         return new ResponseEntity<>(lessonService.getAllLessonsByInternshipId(internshipId), HttpStatus.OK);
     }
 
     @GetMapping("/lessons/{lessonId}")
     public ResponseEntity<LessonDto> getLessonById(
-            @PathVariable(name = "lessonId") Integer lessonId) {
+            @Min(1)
+            @PathVariable(name = "lessonId")
+            Integer lessonId) {
         return new ResponseEntity<>(lessonService.getLessonById(lessonId), HttpStatus.OK);
     }
 
     @PostMapping("/lessons")
-    public void addLessonToInternship(@RequestBody AddLesson addLesson,
-                                      @PathVariable(name = "internshipId") Integer internshipId) {
+    public void addLessonToInternship(@Valid @RequestBody AddLesson addLesson,
+                                      @Min(1) @PathVariable(name = "internshipId") Integer internshipId) {
         addLesson.setInternshipId(internshipId);
         lessonService.addLesson(addLesson);
     }

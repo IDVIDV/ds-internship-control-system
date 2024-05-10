@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -45,19 +46,23 @@ public class UncheckedCommitController {
 
     @GetMapping("/unchecked-commits")
     public ResponseEntity<List<CommitDto>> getAllUncheckedCommitsByLessonId(
-            @PathVariable(name = "lessonId") Integer lessonId) {
+            @Min(1)
+            @PathVariable(name = "lessonId")
+            Integer lessonId) {
         return new ResponseEntity<>(commitService.getAllLatestUncheckedCommits(lessonId), HttpStatus.OK);
     }
 
     @GetMapping("/unchecked-commits/{commitId}")
     public ResponseEntity<CommitDto> getUncheckedCommitById(
-            @PathVariable(name = "commitId") Integer commitId) {
+            @Min(1)
+            @PathVariable(name = "commitId")
+            Integer commitId) {
         return new ResponseEntity<>(commitService.getUncheckedCommitById(commitId), HttpStatus.OK);
     }
 
     @PostMapping("/unchecked-commits/{commitId}/comments")
     public void addCommentToCommit(@RequestBody AddComment addComment,
-                                   @PathVariable(name = "commitId") Integer commitId) {
+                                   @Min(1) @PathVariable(name = "commitId") Integer commitId) {
         addComment.setCommitId(commitId);
         commentService.addComment(addComment);
     }

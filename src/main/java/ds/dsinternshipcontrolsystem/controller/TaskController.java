@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -43,19 +45,23 @@ public class TaskController {
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDto>> getAllTasksByLessonId(
-            @PathVariable(name = "lessonId") Integer lessonId) {
+            @Min(1)
+            @PathVariable(name = "lessonId")
+            Integer lessonId) {
         return new ResponseEntity<>(taskService.getAllTasksByLessonId(lessonId), HttpStatus.OK);
     }
 
     @GetMapping("/tasks/{taskId}")
     public ResponseEntity<TaskDto> getTaskById(
-            @PathVariable(name = "taskId") Integer taskId) {
+            @Min(1)
+            @PathVariable(name = "taskId")
+            Integer taskId) {
         return new ResponseEntity<>(taskService.getTaskById(taskId), HttpStatus.OK);
     }
 
     @PostMapping("/tasks")
-    public void addTaskToLesson(@RequestBody AddTask addTask,
-                                @PathVariable(name = "lessonId") Integer lessonId) {
+    public void addTaskToLesson(@Valid @RequestBody AddTask addTask,
+                                @Min(1) @PathVariable(name = "lessonId") Integer lessonId) {
         addTask.setLessonId(lessonId);
         taskService.addTask(addTask);
     }

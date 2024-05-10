@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -49,17 +50,21 @@ public class TaskForkController {
 
     @GetMapping("/task-forks")
     public ResponseEntity<List<TaskForkDto>> getAllTaskForksByTaskId(
-            @PathVariable(name = "taskId") Integer taskId) {
+            @Min(1)
+            @PathVariable(name = "taskId")
+            Integer taskId) {
         return new ResponseEntity<>(taskForkService.getAllTaskForksByTaskId(taskId), HttpStatus.OK);
     }
 
     @GetMapping("/task-forks/{taskForkId}")
     public ResponseEntity<TaskForkDto> getTaskForkById(
-            @PathVariable(name = "taskForkId") Integer taskForkId) {
+            @Min(1)
+            @PathVariable(name = "taskForkId")
+            Integer taskForkId) {
         return new ResponseEntity<>(taskForkService.getTaskForkById(taskForkId), HttpStatus.OK);
     }
     @PostMapping("/task-forks/{taskForkId}/accept")
-    public void acceptTaskFork(@PathVariable(name = "taskForkId") Integer taskForkId) {
+    public void acceptTaskFork(@Min(1) @PathVariable(name = "taskForkId") Integer taskForkId) {
         taskForkService.acceptTaskFork(taskForkId);
     }
 }

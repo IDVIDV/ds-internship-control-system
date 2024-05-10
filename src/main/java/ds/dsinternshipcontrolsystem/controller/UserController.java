@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -25,9 +26,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/internship/{id}/register")
-    public void signInInternship(@Min(1)
-                                 @ApiParam(name = "idTest", value = "Тест", type = "path")
-                                 @PathVariable("id") Integer internshipId) {
+    public void signInInternship(
+            @Min(1)
+            @ApiParam(name = "idTest", value = "Тест", type = "path")
+            @PathVariable("id")
+            Integer internshipId) {
         userService.signInInternship(internshipId);
     }
 
@@ -42,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterUser registerUser) {
+    public void register(@Valid @RequestBody RegisterUser registerUser) {
         userService.registerUser(registerUser);
     }
 }

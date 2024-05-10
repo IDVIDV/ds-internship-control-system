@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -34,32 +35,46 @@ public class InternshipController {
 
     @GetMapping("/{internshipId}")
     public ResponseEntity<InternshipDto> getInternshipById(
-            @PathVariable(name = "internshipId") Integer internshipId) {
+            @Min(1)
+            @PathVariable(name = "internshipId")
+            Integer internshipId) {
         return new ResponseEntity<>(internshipService.getInternshipById(internshipId), HttpStatus.OK);
     }
 
     @PostMapping
-    public void addInternship(@RequestBody AddInternship addInternship) {
+    public void addInternship(@Valid @RequestBody AddInternship addInternship) {
         internshipService.addInternship(addInternship);
     }
 
     @PostMapping("/{internshipId}/end-registry")
-    public void endRegistry(@Min(1) @PathVariable(name = "internshipId") Integer internshipId) {
+    public void endRegistry(
+            @Min(1)
+            @PathVariable(name = "internshipId")
+            Integer internshipId) {
         internshipService.endRegistry(internshipId);
     }
 
     @PostMapping("/{internshipId}/start")
-    public void startInternship(@Min(1) @PathVariable(name = "internshipId") Integer internshipId) {
+    public void startInternship(
+            @Min(1)
+            @PathVariable(name = "internshipId")
+            Integer internshipId) {
         internshipService.startInternship(internshipId);
     }
 
     @PostMapping("/{internshipId}/end")
-    public void endInternship(@Min(1) @PathVariable(name = "internshipId") Integer internshipId) {
+    public void endInternship(
+            @Min(1)
+            @PathVariable(name = "internshipId")
+            Integer internshipId) {
         internshipService.endInternship(internshipId);
     }
 
     @GetMapping("/{internshipId}/report")
-    public ResponseEntity<Report> getReport(@PathVariable(name = "internshipId") Integer internshipId) {
+    public ResponseEntity<Report> getReport(
+            @Min(1)
+            @PathVariable(name = "internshipId")
+            Integer internshipId) {
         return new ResponseEntity<>(reportService.getReport(internshipId), HttpStatus.OK);
     }
 }
