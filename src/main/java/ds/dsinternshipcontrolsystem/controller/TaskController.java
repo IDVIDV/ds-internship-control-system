@@ -3,8 +3,11 @@ package ds.dsinternshipcontrolsystem.controller;
 import ds.dsinternshipcontrolsystem.dto.AddTask;
 import ds.dsinternshipcontrolsystem.dto.TaskDto;
 import ds.dsinternshipcontrolsystem.service.TaskService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +43,11 @@ import java.util.List;
                 value = "Id занятия, которому принадлежат задание"
         )
 })
+@Api(tags = {"Task Controller"}, description = "Обрабатывает запросы, связанные с заданиями")
 public class TaskController {
     private final TaskService taskService;
 
+    @ApiOperation("Получить все задания занятия")
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDto>> getAllTasksByLessonId(
             @Min(1)
@@ -51,17 +56,25 @@ public class TaskController {
         return new ResponseEntity<>(taskService.getAllTasksByLessonId(lessonId), HttpStatus.OK);
     }
 
+    @ApiOperation("Получить задание")
     @GetMapping("/tasks/{taskId}")
     public ResponseEntity<TaskDto> getTaskById(
+            @ApiParam(value = "Id задания", example = "1", type = "path")
             @Min(1)
             @PathVariable(name = "taskId")
             Integer taskId) {
         return new ResponseEntity<>(taskService.getTaskById(taskId), HttpStatus.OK);
     }
 
+    @ApiOperation("Добавить задание")
     @PostMapping("/tasks")
-    public void addTaskToLesson(@Valid @RequestBody AddTask addTask,
-                                @Min(1) @PathVariable(name = "lessonId") Integer lessonId) {
+    public void addTaskToLesson(
+            @Valid
+            @RequestBody AddTask addTask,
+
+            @Min(1)
+            @PathVariable(name = "lessonId")
+            Integer lessonId) {
         addTask.setLessonId(lessonId);
         taskService.addTask(addTask);
     }

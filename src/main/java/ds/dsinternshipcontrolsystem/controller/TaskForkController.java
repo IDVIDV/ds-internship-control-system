@@ -2,8 +2,11 @@ package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.TaskForkDto;
 import ds.dsinternshipcontrolsystem.service.TaskForkService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +42,16 @@ import java.util.List;
         @ApiImplicitParam(
                 name = "taskId",
                 dataTypeClass = Integer.class,
-                defaultValue = "1",
                 example = "1",
                 paramType = "path",
                 value = "Id заданиия, от которого был сделан форк"
         )
 })
+@Api(tags = {"Task Fork Controller"}, description = "Обрабатывает запросы, связанные с форками")
 public class TaskForkController {
     private final TaskForkService taskForkService;
 
+    @ApiOperation("Получить все форки задания")
     @GetMapping("/task-forks")
     public ResponseEntity<List<TaskForkDto>> getAllTaskForksByTaskId(
             @Min(1)
@@ -56,15 +60,23 @@ public class TaskForkController {
         return new ResponseEntity<>(taskForkService.getAllTaskForksByTaskId(taskId), HttpStatus.OK);
     }
 
+    @ApiOperation("Получить форк")
     @GetMapping("/task-forks/{taskForkId}")
     public ResponseEntity<TaskForkDto> getTaskForkById(
+            @ApiParam(value = "Id форка", example = "1", type = "path")
             @Min(1)
             @PathVariable(name = "taskForkId")
             Integer taskForkId) {
         return new ResponseEntity<>(taskForkService.getTaskForkById(taskForkId), HttpStatus.OK);
     }
+
+    @ApiOperation("Зачесть форк")
     @PostMapping("/task-forks/{taskForkId}/accept")
-    public void acceptTaskFork(@Min(1) @PathVariable(name = "taskForkId") Integer taskForkId) {
+    public void acceptTaskFork(
+            @ApiParam(value = "Id форка", example = "1", type = "path")
+            @Min(1)
+            @PathVariable(name = "taskForkId")
+            Integer taskForkId) {
         taskForkService.acceptTaskFork(taskForkId);
     }
 }
