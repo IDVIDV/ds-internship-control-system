@@ -18,7 +18,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-    //TODO закрыть эндпоинты после их реализации
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -40,7 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/internships/*/lessons/*/unchecked-commits/**",
                         "/internships/*/lessons/*/tasks/*/task-forks/**")
                 .hasAuthority("ADMIN")
-                .antMatchers("/user/**", "/internship/*/register").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/user/**", "/internship/*/register", "/internship/*/leave")
+                .hasAnyAuthority("ADMIN", "USER")
                 .and().formLogin()
                 .and().httpBasic();
     }

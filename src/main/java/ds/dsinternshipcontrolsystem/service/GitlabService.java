@@ -28,8 +28,6 @@ public class GitlabService {
     private final GitLabApi gitLabApi;
 
     public void handlePushEvent(PushEvent pushEvent) {
-        pushEvent.getProject();
-
         EventRepository eventRepository = pushEvent.getRepository();
 
         if (eventRepository == null) {
@@ -38,6 +36,10 @@ public class GitlabService {
         }
 
         TaskFork taskFork = taskForkRepository.findByUrl(eventRepository.getHomepage());
+
+        if (taskFork == null) {
+            return;
+        }
 
         List<EventCommit> eventCommits = pushEvent.getCommits();
         List<Commit> commitsToSave = new ArrayList<>();

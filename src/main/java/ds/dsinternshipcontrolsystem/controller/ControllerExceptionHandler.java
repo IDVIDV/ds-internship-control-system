@@ -1,5 +1,7 @@
 package ds.dsinternshipcontrolsystem.controller;
 
+import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
+import ds.dsinternshipcontrolsystem.exception.AlreadyLeftException;
 import ds.dsinternshipcontrolsystem.exception.ForkFailedException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
@@ -64,9 +66,21 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return e.getMessage();
     }
 
+    @ExceptionHandler(AlreadyJoinedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleAlreadyJoinedException(AlreadyJoinedException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(AlreadyLeftException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleAlreadyLeftException(AlreadyLeftException e) {
+        return e.getMessage();
+    }
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleForkFailedExceptionException(RuntimeException e) {
+    public String handleAnyOtherException(RuntimeException e) {
         return e.getMessage();
     }
 }

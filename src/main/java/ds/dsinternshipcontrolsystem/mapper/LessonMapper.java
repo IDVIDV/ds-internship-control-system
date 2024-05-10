@@ -11,6 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = TaskMapper.class)
 public interface LessonMapper {
     @Mapping(target = "internshipId", source = "internship.id")
+    @Mapping(target = "taskDtoList", source = "tasks")
     LessonDto toLessonDto(Lesson lesson);
 
     List<LessonDto> toLessonDtoList(List<Lesson> lessonList);

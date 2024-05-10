@@ -3,6 +3,7 @@ package ds.dsinternshipcontrolsystem.mapper;
 import ds.dsinternshipcontrolsystem.dto.AddInternship;
 import ds.dsinternshipcontrolsystem.dto.InternshipDto;
 import ds.dsinternshipcontrolsystem.entity.Internship;
+import ds.dsinternshipcontrolsystem.entity.archive.ArchiveInternship;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,4 +17,8 @@ public interface InternshipMapper {
     List<InternshipDto> toInternshipDtoList(List<Internship> internshipList);
 
     Internship toInternship(AddInternship addInternship);
+
+    @Mapping(target = "userInternships", ignore = true)
+    @Mapping(target = "performances", ignore = true)
+    ArchiveInternship toArchiveInternship(Internship internship);
 }

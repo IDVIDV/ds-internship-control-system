@@ -4,9 +4,11 @@ import ds.dsinternshipcontrolsystem.entity.Commit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CommitRepository extends JpaRepository<Commit, Integer> {
     @Query(value =
             "SELECT c1.commit_id, c1.task_fork_id, c1.author, c1.commit_date, c1.url " +

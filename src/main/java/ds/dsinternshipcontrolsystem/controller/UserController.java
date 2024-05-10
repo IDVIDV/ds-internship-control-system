@@ -38,6 +38,16 @@ public class UserController {
         userService.signInInternship(internshipId);
     }
 
+    @ApiOperation("Покинуть стажировку")
+    @PostMapping("/internship/{id}/leave")
+    public void leaveInternship(
+            @ApiParam(value = "Id стажировки", example = "1", type = "path")
+            @Min(1)
+            @PathVariable("id")
+            Integer internshipId) {
+        userService.leaveInternship(internshipId);
+    }
+
     @ApiOperation("Получить сообщения, адресованные пользователю")
     @GetMapping("/user/messages")
     public ResponseEntity<List<MessageDto>> getMessages() {

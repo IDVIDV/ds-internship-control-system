@@ -10,6 +10,7 @@ import ds.dsinternshipcontrolsystem.entity.UserInternship;
 import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
 import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
 import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
+import ds.dsinternshipcontrolsystem.exception.AlreadyLeftException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
 import ds.dsinternshipcontrolsystem.mapper.TaskForkMapper;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,6 +42,7 @@ public class UserService implements UserDetailsService {
     private final MessageService messageService;
     private final TaskForkRepository taskForkRepository;
     private final TaskForkMapper taskForkMapper;
+    private final ArchiveService archiveService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -76,14 +79,16 @@ public class UserService implements UserDetailsService {
             throw new InternshipRegistryClosedException("Internship is not opened for registry");
         }
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user;
 
-        if (user == null) {
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             throw new EntityNotFoundException("User not authenticated");
+        } else {
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
 
         UserInternship userInternship = userInternshipRepository
-                .findByInternshipIdAndUserId(user.getId(), internshipId);
+                .findByInternshipIdAndUserId(internshipId, user.getId());
         UserInternship userInternshipToSave;
 
         if (userInternship != null) {
@@ -101,6 +106,48 @@ public class UserService implements UserDetailsService {
         }
 
         userInternshipRepository.save(userInternshipToSave);
+    }
+
+    public void leaveInternship(Integer internshipId) {
+        Internship internship = internshipRepository.findById(internshipId).orElse(null);
+
+        if (internship == null) {
+            throw new EntityNotFoundException("Internship with given id does not exist");
+        }
+
+        User user;
+
+        if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            throw new EntityNotFoundException("User not authenticated");
+        } else {
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }
+
+        UserInternship userInternship = userInternshipRepository
+                .findByInternshipIdAndUserId(internshipId, user.getId());
+        UserInternship userInternshipToSave;
+
+        if (userInternship != null) {
+            if (userInternship.getStatus().equals(UserInternshipStatus.LEFT)) {
+                throw new AlreadyLeftException("Already left");
+            }
+
+            userInternshipToSave = userInternship;
+            userInternshipToSave.setStatus(UserInternshipStatus.LEFT);
+        } else {
+            userInternshipToSave = new UserInternship();
+            userInternshipToSave.setInternship(internship);
+            userInternshipToSave.setUser(user);
+            userInternshipToSave.setStatus(UserInternshipStatus.LEFT);
+        }
+
+        userInternshipRepository.save(userInternshipToSave);
+
+        if (internship.getStatus() != InternshipStatus.REGISTRY) {
+            List<User> userToArchive = new ArrayList<>();
+            userToArchive.add(user);
+            archiveService.archiveUsersInInternship(userToArchive, internship);
+        }
     }
 
     public List<Performance> getPerformance() {

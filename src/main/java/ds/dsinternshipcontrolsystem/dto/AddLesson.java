@@ -22,14 +22,14 @@ public class AddLesson {
     private Integer internshipId;
 
     @ApiModelProperty(
-            example = "Internship Name Example",
+            example = "Lesson Name Example",
             value = "Название стажировки"
     )
     @NotBlank(message = "Название занятия не может быть пустым")
     private String lessonName;
 
     @ApiModelProperty(
-            example = "Internship Description Example",
+            example = "Lesson Description Example",
             value = "Описание занятия"
     )
     private String description;

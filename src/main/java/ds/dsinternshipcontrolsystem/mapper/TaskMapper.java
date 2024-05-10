@@ -11,6 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = TaskForkMapper.class)
 public interface TaskMapper {
     @Mapping(target = "lessonId", source = "lesson.id")
+    @Mapping(target = "taskForkDtoList", source = "taskForks")
     TaskDto toTaskDto(Task task);
 
     List<TaskDto> toTaskDtoList(List<Task> taskList);

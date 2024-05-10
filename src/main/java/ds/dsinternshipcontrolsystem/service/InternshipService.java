@@ -3,22 +3,29 @@ package ds.dsinternshipcontrolsystem.service;
 import ds.dsinternshipcontrolsystem.dto.AddInternship;
 import ds.dsinternshipcontrolsystem.dto.InternshipDto;
 import ds.dsinternshipcontrolsystem.entity.Internship;
+import ds.dsinternshipcontrolsystem.entity.User;
 import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
+import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
 import ds.dsinternshipcontrolsystem.exception.WrongInternshipStatusException;
 import ds.dsinternshipcontrolsystem.mapper.InternshipMapper;
 import ds.dsinternshipcontrolsystem.repository.InternshipRepository;
+import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
+import ds.dsinternshipcontrolsystem.repository.projection.UserOnly;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class InternshipService {
     private final InternshipRepository internshipRepository;
+    private final UserInternshipRepository userInternshipRepository;
     private final InternshipMapper internshipMapper;
     private final TaskForkService taskForkService;
+    private final ArchiveService archiveService;
 
     public List<InternshipDto> getAllInternships() {
         return internshipMapper.toInternshipDtoList(internshipRepository.findAll());
@@ -90,5 +97,13 @@ public class InternshipService {
 
         internship.setStatus(InternshipStatus.CLOSED);
         internshipRepository.save(internship);
+
+        List<User> usersInInternship = userInternshipRepository
+                .findAllByInternshipIdAndStatus(internship.getId(), UserInternshipStatus.JOINED)
+                .stream()
+                .map(UserOnly::getUser)
+                .collect(Collectors.toList());
+
+        archiveService.archiveUsersInInternship(usersInInternship, internship);
     }
 }
