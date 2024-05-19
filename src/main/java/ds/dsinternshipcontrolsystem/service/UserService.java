@@ -9,8 +9,8 @@ import ds.dsinternshipcontrolsystem.entity.User;
 import ds.dsinternshipcontrolsystem.entity.UserInternship;
 import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
 import ds.dsinternshipcontrolsystem.entity.status.UserInternshipStatus;
-import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
-import ds.dsinternshipcontrolsystem.exception.AlreadyLeftException;
+import ds.dsinternshipcontrolsystem.exception.UserAlreadyJoinedInternshipException;
+import ds.dsinternshipcontrolsystem.exception.UserAlreadyLeftInternshipException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
 import ds.dsinternshipcontrolsystem.exception.UnauthorizedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
@@ -73,11 +73,12 @@ public class UserService implements UserDetailsService {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist", internshipId));
         }
 
         if (!internship.getStatus().equals(InternshipStatus.REGISTRY)) {
-            throw new InternshipRegistryClosedException("Internship is not opened for registry");
+            throw new InternshipRegistryClosedException(String.format("Internship with id %d is not in %s state",
+                            internshipId, InternshipStatus.REGISTRY));
         }
 
         User user = getAuthenticatedUser();
@@ -88,7 +89,8 @@ public class UserService implements UserDetailsService {
 
         if (userInternship != null) {
             if (userInternship.getStatus().equals(UserInternshipStatus.JOINED)) {
-                throw new AlreadyJoinedException("Already joined");
+                throw new UserAlreadyJoinedInternshipException(String.format("User with id %d already joined internship with id %d",
+                        user.getId(), internshipId));
             }
 
             userInternshipToSave = userInternship;
@@ -107,7 +109,7 @@ public class UserService implements UserDetailsService {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist", internshipId));
         }
 
         User user = getAuthenticatedUser();
@@ -118,7 +120,8 @@ public class UserService implements UserDetailsService {
 
         if (userInternship != null) {
             if (userInternship.getStatus().equals(UserInternshipStatus.LEFT)) {
-                throw new AlreadyLeftException("Already left");
+                throw new UserAlreadyLeftInternshipException(String.format("User with id %d already left internship with id %d",
+                        user.getId(), internshipId));
             }
 
             userInternshipToSave = userInternship;
@@ -153,7 +156,7 @@ public class UserService implements UserDetailsService {
 
     private User getAuthenticatedUser() {
         if (!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            throw new UnauthorizedException("User is not authenticated");
+            throw new UnauthorizedException("User is not authorized");
         } else {
             return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }

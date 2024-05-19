@@ -30,7 +30,7 @@ public class TaskService {
         Task task = taskRepository.findById(taskId).orElse(null);
 
         if (task == null) {
-            throw new EntityNotFoundException("Task with given id does not exist");
+            throw new EntityNotFoundException(String.format("Task with id %d does not exist", taskId));
         }
 
         return taskMapper.toTaskDto(task);
@@ -40,7 +40,8 @@ public class TaskService {
         Lesson lesson = lessonRepository.findById(addTask.getLessonId()).orElse(null);
 
         if (lesson == null) {
-            throw new EntityNotFoundException("Lesson with given id does not exist");
+            throw new EntityNotFoundException(String.format("Lesson with id %d does not exist",
+                    addTask.getLessonId()));
         }
 
         Task task = taskMapper.toTask(addTask);

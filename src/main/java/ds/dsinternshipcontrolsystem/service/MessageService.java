@@ -12,6 +12,7 @@ import ds.dsinternshipcontrolsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,10 +25,10 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
 
-    public void noteStudentOnCommitCheck(Comment comment) {
-        if (comment == null || comment.getUser() == null || comment.getCommit() == null) {
-            return;
-        }
+    public void noticeStudentOnCommitCheck(@NotNull Comment comment) {
+//        if (comment.getUser() == null || comment.getCommit() == null) {
+//            return;   //TODO exception
+//        }
 
         Message message = new Message();
         message.setReceiver(comment.getUser());

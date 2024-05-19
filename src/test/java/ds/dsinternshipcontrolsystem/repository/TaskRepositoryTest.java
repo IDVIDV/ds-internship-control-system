@@ -146,7 +146,7 @@ public class TaskRepositoryTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(ints = {-1})
-    void findAllByLessonInternshipIdTest(Integer internshipId) {
+    void findAllByLessonUnexistingInternshipIdTest(Integer internshipId) {
         List<Task> actual = taskRepository.findAllByLessonInternshipId(internshipId);
 
         assertThat(actual).isEmpty();

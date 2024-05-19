@@ -10,6 +10,7 @@ import ds.dsinternshipcontrolsystem.repository.CommitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -23,10 +24,16 @@ public class CommentService {
     public void addComment(AddComment addComment) {
         Comment comment = commentMapper.toComment(addComment);
         Commit commit = commitRepository.findById(comment.getCommit().getId()).orElse(null);
+
+        if (commit == null) {
+            throw new EntityNotFoundException(String.format("Commit with id %d does not exist",
+                    addComment.getCommitId()));
+        }
+
         comment.setCommit(commit);
         comment.setUser(commit.getTaskFork().getUser());
         commentRepository.save(comment);
-        messageService.noteStudentOnCommitCheck(comment);
+        messageService.noticeStudentOnCommitCheck(comment);
     }
 
     public List<CommentDto> getAllCommentsByCommitId(Integer commitId) {

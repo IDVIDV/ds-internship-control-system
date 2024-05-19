@@ -14,6 +14,7 @@ import ds.dsinternshipcontrolsystem.repository.archive.ArchivePerformanceReposit
 import ds.dsinternshipcontrolsystem.repository.archive.ArchiveUserInternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.archive.ArchiveUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ArchiveService {
     private final ArchiveUserRepository archiveUserRepository;
     private final ArchivePerformanceRepository archivePerformanceRepository;
@@ -43,12 +45,12 @@ public class ArchiveService {
 
         archiveUserInternshipRepository.saveAll(
                 userInternshipRepository.findAllByInternshipIdAndUserIdIn(
-                        internship.getId(),
-                        userIds
-                )
-                .stream()
-                .map(userInternshipMapper::toArchiveUserInternship)
-                .collect(Collectors.toList())
+                                internship.getId(),
+                                userIds
+                        )
+                        .stream()
+                        .map(userInternshipMapper::toArchiveUserInternship)
+                        .collect(Collectors.toList())
         );
 
         archivePerformanceRepository.saveAll(
@@ -57,8 +59,11 @@ public class ArchiveService {
                         .map(taskForkMapper::toArchivePerformance)
                         .map(performance -> {
                             performance.setInternship(archiveInternship);
-                            return performance;}
-                        ).collect(Collectors.toList())
+                            return performance;
+                        })
+                        .collect(Collectors.toList())
         );
+
+        log.info("Archived users {} in internship {}", users, internship);
     }
 }

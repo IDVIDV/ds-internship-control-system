@@ -13,6 +13,7 @@ import ds.dsinternshipcontrolsystem.repository.TaskForkRepository;
 import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.projection.UserOnly;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskForkService {
     private final GitlabService gitLabService;
     private final TaskForkRepository taskForkRepository;
@@ -37,7 +39,7 @@ public class TaskForkService {
         TaskFork taskFork = taskForkRepository.findById(taskForkId).orElse(null);
 
         if (taskFork == null) {
-            throw new EntityNotFoundException("TaskFork with given id does not exist");
+            throw new EntityNotFoundException(String.format("TaskFork with id %d does not exist", taskForkId));
         }
 
         return taskForkMapper.toTaskForkDto(taskFork);
@@ -47,7 +49,7 @@ public class TaskForkService {
         TaskFork taskFork = taskForkRepository.findById(taskForkId).orElse(null);
 
         if (taskFork == null) {
-            throw new EntityNotFoundException("TaskFork with given id does not exist");
+            throw new EntityNotFoundException(String.format("TaskFork with id %d does not exist", taskForkId));
         }
 
         taskFork.setAccepted(true);
@@ -86,6 +88,7 @@ public class TaskForkService {
 
             taskForkRepository.saveAll(taskForks);
         } catch (Exception e) {
+            log.error("Error happened during creating forks.", e);
             messageService.noticeAllAdminsOnForkFail(users, tasks, e.getMessage());
             throw new ForkFailedException(e.getMessage());
         }

@@ -28,7 +28,7 @@ public class LessonService {
         Lesson lesson = lessonRepository.findById(lessonId).orElse(null);
 
         if (lesson == null) {
-            throw new EntityNotFoundException("Lesson with given id does not exist");
+            throw new EntityNotFoundException(String.format("Lesson with id %d does not exist", lessonId));
         }
 
         return lessonMapper.toLessonDto(lesson);
@@ -38,7 +38,8 @@ public class LessonService {
         Internship internship = internshipRepository.findById(addLesson.getInternshipId()).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist",
+                    addLesson.getInternshipId()));
         }
 
         Lesson lesson = lessonMapper.toLesson(addLesson);

@@ -182,4 +182,6 @@ public class TaskForkRepositoryTest {
 
         assertThat(actual).isEmpty();
     }
+
+    void findAllByUserIdInAndTaskLessonInternshipIdTest() {}
 }

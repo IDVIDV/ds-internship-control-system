@@ -12,6 +12,7 @@ import ds.dsinternshipcontrolsystem.repository.InternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.projection.UserOnly;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InternshipService {
     private final InternshipRepository internshipRepository;
     private final UserInternshipRepository userInternshipRepository;
@@ -35,7 +37,7 @@ public class InternshipService {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist", internshipId));
         }
 
         return internshipMapper.toInternshipDto(internship);
@@ -51,7 +53,7 @@ public class InternshipService {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist", internshipId));
         }
 
         if (!internship.getStatus().equals(InternshipStatus.REGISTRY)) {
@@ -61,13 +63,16 @@ public class InternshipService {
 
         internship.setStatus(InternshipStatus.AWAITING_START);
         internshipRepository.save(internship);
+
+        log.info("Internship transferred from {} to {} state",
+                InternshipStatus.REGISTRY, InternshipStatus.AWAITING_START);
     }
 
     public void startInternship(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist", internshipId));
         }
 
         if (!internship.getStatus().equals(InternshipStatus.AWAITING_START)) {
@@ -79,13 +84,16 @@ public class InternshipService {
 
         internship.setStatus(InternshipStatus.IN_PROGRESS);
         internshipRepository.save(internship);
+
+        log.info("Internship transferred from {} to {} state",
+                InternshipStatus.AWAITING_START, InternshipStatus.IN_PROGRESS);
     }
 
     public void endInternship(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
         if (internship == null) {
-            throw new EntityNotFoundException("Internship with given id does not exist");
+            throw new EntityNotFoundException(String.format("Internship with id %d does not exist", internshipId));
         }
 
         if (!internship.getStatus().equals(InternshipStatus.IN_PROGRESS)) {
@@ -106,5 +114,8 @@ public class InternshipService {
 
         internship.setStatus(InternshipStatus.CLOSED);
         internshipRepository.save(internship);
+
+        log.info("Internship transferred from {} to {} state",
+                InternshipStatus.IN_PROGRESS, InternshipStatus.CLOSED);
     }
 }

@@ -7,6 +7,7 @@ import ds.dsinternshipcontrolsystem.entity.User;
 import ds.dsinternshipcontrolsystem.repository.CommitRepository;
 import ds.dsinternshipcontrolsystem.repository.TaskForkRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Author;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GitlabService {
     private final CommitRepository commitRepository;
     private final TaskForkRepository taskForkRepository;
@@ -35,13 +37,14 @@ public class GitlabService {
         EventRepository eventRepository = pushEvent.getRepository();
 
         if (eventRepository == null) {
+            log.info("Push event {} rejected because of null eventRepository", pushEvent);
             return;
-            //TODO exception?
         }
 
         TaskFork taskFork = taskForkRepository.findByUrl(eventRepository.getHomepage());
 
         if (taskFork == null) {
+            log.info("Push event {} rejected because of unregistered fork", pushEvent);
             return;
         }
 
@@ -59,6 +62,8 @@ public class GitlabService {
         }
 
         commitRepository.saveAll(commitsToSave);
+
+        log.info("Push event handled: {}; saved commits: {}", pushEvent, commitsToSave);
     }
 
     public List<TaskFork> createForks(List<Task> tasks, User user) throws GitLabApiException {
@@ -78,6 +83,8 @@ public class GitlabService {
             taskForks.add(taskFork);
         }
 
+        log.info("Forks created for user {} of tasks {}", user, tasks);
+
         return taskForks;
     }
 
@@ -94,8 +101,11 @@ public class GitlabService {
                 .withUsername(user.getUsername())
                 .withName(user.getFullName());
 
-        return gitLabApi.getUserApi().createUser(gitlabUser,
-                gitlabDefaultUserPassword,
-                false);
+        gitlabUser = gitLabApi.getUserApi().createUser(gitlabUser,
+                gitlabDefaultUserPassword, false);
+
+        log.info("New user registered in gitlab: {}; created account info: {}", user, gitlabUser);
+
+        return gitlabUser;
     }
 }

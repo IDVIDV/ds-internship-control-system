@@ -20,7 +20,8 @@ public class CommitService {
         Commit commit = commitRepository.findByIdAndTaskForkAccepted(commitId, false);
 
         if (commit == null) {
-            throw new EntityNotFoundException("Commit with given id does not exist or was accepted");
+            throw new EntityNotFoundException(String.format("Commit with id %d does not exist or was accepted",
+                    commitId));
         }
 
         return commitMapper.toCommitDto(commit);

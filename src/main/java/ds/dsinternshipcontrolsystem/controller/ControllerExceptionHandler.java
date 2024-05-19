@@ -1,12 +1,14 @@
 package ds.dsinternshipcontrolsystem.controller;
 
-import ds.dsinternshipcontrolsystem.exception.AlreadyJoinedException;
-import ds.dsinternshipcontrolsystem.exception.AlreadyLeftException;
+import ds.dsinternshipcontrolsystem.exception.UserAlreadyJoinedInternshipException;
+import ds.dsinternshipcontrolsystem.exception.UserAlreadyLeftInternshipException;
 import ds.dsinternshipcontrolsystem.exception.ForkFailedException;
 import ds.dsinternshipcontrolsystem.exception.InternshipRegistryClosedException;
 import ds.dsinternshipcontrolsystem.exception.UnauthorizedException;
 import ds.dsinternshipcontrolsystem.exception.UserAlreadyRegisteredException;
 import ds.dsinternshipcontrolsystem.exception.WrongInternshipStatusException;
+import lombok.extern.slf4j.Slf4j;
+import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
+@Slf4j
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -67,15 +70,15 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return e.getMessage();
     }
 
-    @ExceptionHandler(AlreadyJoinedException.class)
+    @ExceptionHandler(UserAlreadyJoinedInternshipException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleAlreadyJoinedException(AlreadyJoinedException e) {
+    public String handleUserAlreadyJoinedInternshipException(UserAlreadyJoinedInternshipException e) {
         return e.getMessage();
     }
 
-    @ExceptionHandler(AlreadyLeftException.class)
+    @ExceptionHandler(UserAlreadyLeftInternshipException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleAlreadyLeftException(AlreadyLeftException e) {
+    public String handleUserAlreadyLeftInternshipException(UserAlreadyLeftInternshipException e) {
         return e.getMessage();
     }
 
@@ -88,6 +91,14 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleAnyOtherException(RuntimeException e) {
+        log.error("Unhandled exception caught", e);
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(GitLabApiException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleGitlabApiException(GitLabApiException e) {
+        log.error("Unhandled GitlabApi exception caught", e);
         return e.getMessage();
     }
 }
