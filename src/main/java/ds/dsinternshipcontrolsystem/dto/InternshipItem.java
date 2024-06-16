@@ -8,13 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "Данные, отправляемые приложением при запросе стажировки")
-public class InternshipDto {
+@ApiModel(description = "Данные, отправляемые приложением при запросе всех стажировок")
+public class InternshipItem {
     @ApiModelProperty(
             example = "1",
             value = "Id стажировки"
@@ -52,9 +51,4 @@ public class InternshipDto {
             value = "Статус стажировки"
     )
     private InternshipStatus status;
-
-    @ApiModelProperty(
-            value = "Список занятий стажировки"
-    )
-    private List<LessonItem> lessonItemList;
 }

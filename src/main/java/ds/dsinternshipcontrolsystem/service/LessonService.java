@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.service;
 
 import ds.dsinternshipcontrolsystem.dto.AddLesson;
 import ds.dsinternshipcontrolsystem.dto.LessonDto;
+import ds.dsinternshipcontrolsystem.dto.LessonItem;
 import ds.dsinternshipcontrolsystem.entity.Internship;
 import ds.dsinternshipcontrolsystem.entity.Lesson;
 import ds.dsinternshipcontrolsystem.mapper.LessonMapper;
@@ -20,8 +21,8 @@ public class LessonService {
     private final LessonMapper lessonMapper;
     private final LessonRepository lessonRepository;
 
-    public List<LessonDto> getAllLessonsByInternshipId(Integer internshipId) {
-        return lessonMapper.toLessonDtoList(lessonRepository.findAllByInternshipId(internshipId));
+    public List<LessonItem> getAllLessonsByInternshipId(Integer internshipId) {
+        return lessonMapper.toLessonItemList(lessonRepository.findAllByInternshipId(internshipId));
     }
 
     public LessonDto getLessonById(Integer lessonId) {

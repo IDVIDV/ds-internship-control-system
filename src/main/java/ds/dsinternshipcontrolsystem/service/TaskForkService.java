@@ -1,6 +1,7 @@
 package ds.dsinternshipcontrolsystem.service;
 
 import ds.dsinternshipcontrolsystem.dto.TaskForkDto;
+import ds.dsinternshipcontrolsystem.dto.TaskForkItem;
 import ds.dsinternshipcontrolsystem.entity.Internship;
 import ds.dsinternshipcontrolsystem.entity.Lesson;
 import ds.dsinternshipcontrolsystem.entity.Task;
@@ -31,8 +32,8 @@ public class TaskForkService {
     private final TaskForkMapper taskForkMapper;
     private final MessageService messageService;
 
-    public List<TaskForkDto> getAllTaskForksByTaskId(Integer taskId) {
-        return taskForkMapper.toTaskForkDtoList(taskForkRepository.findAllByTaskId(taskId));
+    public List<TaskForkItem> getAllTaskForksByTaskId(Integer taskId) {
+        return taskForkMapper.toTaskForkItemList(taskForkRepository.findAllByTaskId(taskId));
     }
 
     public TaskForkDto getTaskForkById(Integer taskForkId) {

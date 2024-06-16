@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "Данные, отправляемые приложение при запросе отчета по стажировке")
+@ApiModel(description = "Данные, отправляемые приложением при запросе отчета по стажировке")
 public class Report {
     @ApiModelProperty(
             value = "Участники на момент составления отчета"
@@ -21,5 +21,5 @@ public class Report {
     @ApiModelProperty(
             value = "Опубликованные задания на момент составления отчета"
     )
-    private List<TaskDto> tasks;
+    private List<TaskItem> tasks;
 }

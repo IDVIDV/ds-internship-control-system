@@ -39,7 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/internships/*/lessons/*/unchecked-commits/**",
                         "/internships/*/lessons/*/tasks/*/task-forks/**")
                 .hasAuthority("ADMIN")
-                .antMatchers("/user/**", "/internship/*/register", "/internship/*/leave")
+                .antMatchers(
+                        "/user/**",
+                        "/internship/*/register",
+                        "/internship/*/leave")
                 .hasAnyAuthority("ADMIN", "USER")
                 .and().formLogin()
                 .and().httpBasic();

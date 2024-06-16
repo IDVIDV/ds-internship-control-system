@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.AddLesson;
 import ds.dsinternshipcontrolsystem.dto.LessonDto;
+import ds.dsinternshipcontrolsystem.dto.LessonItem;
 import ds.dsinternshipcontrolsystem.service.LessonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,7 +43,7 @@ public class LessonController {
 
     @ApiOperation("Получить все занятия стажировки")
     @GetMapping("/lessons")
-    public ResponseEntity<List<LessonDto>> getAllLessonsByInternshipId(
+    public ResponseEntity<List<LessonItem>> getAllLessonsByInternshipId(
             @Min(1)
             @PathVariable(name = "internshipId")
             Integer internshipId) {

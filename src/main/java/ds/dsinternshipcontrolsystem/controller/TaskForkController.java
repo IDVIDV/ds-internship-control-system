@@ -1,6 +1,7 @@
 package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.TaskForkDto;
+import ds.dsinternshipcontrolsystem.dto.TaskForkItem;
 import ds.dsinternshipcontrolsystem.service.TaskForkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -53,7 +54,7 @@ public class TaskForkController {
 
     @ApiOperation("Получить все форки задания")
     @GetMapping("/task-forks")
-    public ResponseEntity<List<TaskForkDto>> getAllTaskForksByTaskId(
+    public ResponseEntity<List<TaskForkItem>> getAllTaskForksByTaskId(
             @Min(1)
             @PathVariable(name = "taskId")
             Integer taskId) {

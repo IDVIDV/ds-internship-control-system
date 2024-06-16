@@ -148,6 +148,4 @@ public class UserInternshipRepositoryTest {
 
         assertThat(actual).isEmpty();
     }
-
-    void findAllByInternshipIdAndUserIdIn () {}
 }

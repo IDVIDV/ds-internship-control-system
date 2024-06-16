@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.service;
 
 import ds.dsinternshipcontrolsystem.dto.AddTask;
 import ds.dsinternshipcontrolsystem.dto.TaskDto;
+import ds.dsinternshipcontrolsystem.dto.TaskItem;
 import ds.dsinternshipcontrolsystem.entity.Lesson;
 import ds.dsinternshipcontrolsystem.entity.Task;
 import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
@@ -22,8 +23,8 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskForkService taskForkService;
 
-    public List<TaskDto> getAllTasksByLessonId(Integer lessonId) {
-        return taskMapper.toTaskDtoList(taskRepository.findAllByLessonId(lessonId));
+    public List<TaskItem> getAllTasksByLessonId(Integer lessonId) {
+        return taskMapper.toTaskItemList(taskRepository.findAllByLessonId(lessonId));
     }
 
     public TaskDto getTaskById(Integer taskId) {

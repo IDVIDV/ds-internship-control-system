@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.AddInternship;
 import ds.dsinternshipcontrolsystem.dto.InternshipDto;
+import ds.dsinternshipcontrolsystem.dto.InternshipItem;
 import ds.dsinternshipcontrolsystem.dto.Report;
 import ds.dsinternshipcontrolsystem.service.InternshipService;
 import ds.dsinternshipcontrolsystem.service.ReportService;
@@ -34,7 +35,7 @@ public class InternshipController {
 
     @ApiOperation("Получить все стажировки")
     @GetMapping
-    public ResponseEntity<List<InternshipDto>> getAllInternships() {
+    public ResponseEntity<List<InternshipItem>> getAllInternships() {
         return new ResponseEntity<>(internshipService.getAllInternships(), HttpStatus.OK);
     }
 

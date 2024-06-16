@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.controller;
 
 import ds.dsinternshipcontrolsystem.dto.AddTask;
 import ds.dsinternshipcontrolsystem.dto.TaskDto;
+import ds.dsinternshipcontrolsystem.dto.TaskItem;
 import ds.dsinternshipcontrolsystem.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -49,7 +50,7 @@ public class TaskController {
 
     @ApiOperation("Получить все задания занятия")
     @GetMapping("/tasks")
-    public ResponseEntity<List<TaskDto>> getAllTasksByLessonId(
+    public ResponseEntity<List<TaskItem>> getAllTasksByLessonId(
             @Min(1)
             @PathVariable(name = "lessonId")
             Integer lessonId) {

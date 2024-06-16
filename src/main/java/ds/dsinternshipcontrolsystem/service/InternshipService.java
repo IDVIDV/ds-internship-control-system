@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.service;
 
 import ds.dsinternshipcontrolsystem.dto.AddInternship;
 import ds.dsinternshipcontrolsystem.dto.InternshipDto;
+import ds.dsinternshipcontrolsystem.dto.InternshipItem;
 import ds.dsinternshipcontrolsystem.entity.Internship;
 import ds.dsinternshipcontrolsystem.entity.User;
 import ds.dsinternshipcontrolsystem.entity.status.InternshipStatus;
@@ -13,6 +14,9 @@ import ds.dsinternshipcontrolsystem.repository.UserInternshipRepository;
 import ds.dsinternshipcontrolsystem.repository.projection.UserOnly;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -29,10 +33,11 @@ public class InternshipService {
     private final TaskForkService taskForkService;
     private final ArchiveService archiveService;
 
-    public List<InternshipDto> getAllInternships() {
-        return internshipMapper.toInternshipDtoList(internshipRepository.findAll());
+    public List<InternshipItem> getAllInternships() {
+        return internshipMapper.toInternshipItemList(internshipRepository.findAll());
     }
 
+    @Cacheable(cacheNames = "internship", key = "#internshipId")
     public InternshipDto getInternshipById(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
@@ -43,12 +48,15 @@ public class InternshipService {
         return internshipMapper.toInternshipDto(internship);
     }
 
-    public void addInternship(AddInternship addInternship) {
+    @CachePut(cacheNames = "internship", key = "#result.id" )
+    public InternshipDto addInternship(AddInternship addInternship) {
         Internship internship = internshipMapper.toInternship(addInternship);
         internship.setStatus(InternshipStatus.REGISTRY);
         internshipRepository.save(internship);
+        return internshipMapper.toInternshipDto(internship);
     }
 
+    @CacheEvict(cacheNames = "internship", key = "#internshipId")
     public void endRegistry(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
@@ -68,6 +76,7 @@ public class InternshipService {
                 InternshipStatus.REGISTRY, InternshipStatus.AWAITING_START);
     }
 
+    @CacheEvict(cacheNames = "internship", key = "#internshipId")
     public void startInternship(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
@@ -89,6 +98,7 @@ public class InternshipService {
                 InternshipStatus.AWAITING_START, InternshipStatus.IN_PROGRESS);
     }
 
+    @CacheEvict(cacheNames = "internship", key = "#internshipId")
     public void endInternship(Integer internshipId) {
         Internship internship = internshipRepository.findById(internshipId).orElse(null);
 
@@ -100,9 +110,6 @@ public class InternshipService {
             throw new WrongInternshipStatusException(String.format("Internship should be in %s state",
                     InternshipStatus.IN_PROGRESS));
         }
-
-//        internship.setStatus(InternshipStatus.CLOSED);
-//        internshipRepository.save(internship);
 
         List<User> usersInInternship = userInternshipRepository
                 .findAllByInternshipIdAndStatus(internship.getId(), UserInternshipStatus.JOINED)

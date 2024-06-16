@@ -26,10 +26,6 @@ public class MessageService {
     private final MessageMapper messageMapper;
 
     public void noticeStudentOnCommitCheck(@NotNull Comment comment) {
-//        if (comment.getUser() == null || comment.getCommit() == null) {
-//            return;   //TODO exception
-//        }
-
         Message message = new Message();
         message.setReceiver(comment.getUser());
         message.setSendDate(Timestamp.valueOf(LocalDateTime.now()));

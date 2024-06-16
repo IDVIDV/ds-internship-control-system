@@ -2,6 +2,7 @@ package ds.dsinternshipcontrolsystem.mapper;
 
 import ds.dsinternshipcontrolsystem.dto.Performance;
 import ds.dsinternshipcontrolsystem.dto.TaskForkDto;
+import ds.dsinternshipcontrolsystem.dto.TaskForkItem;
 import ds.dsinternshipcontrolsystem.entity.TaskFork;
 import ds.dsinternshipcontrolsystem.entity.archive.ArchivePerformance;
 import org.mapstruct.Mapper;
@@ -16,7 +17,11 @@ public interface TaskForkMapper {
     @Mapping(target = "commitDtoList", source = "commits")
     TaskForkDto toTaskForkDto(TaskFork taskFork);
 
-    List<TaskForkDto> toTaskForkDtoList(List<TaskFork> taskForkList);
+    @Mapping(target = "taskId", source = "task.id")
+    @Mapping(target = "userId", source = "user.id")
+    TaskForkItem toTaskForkItem(TaskFork taskFork);
+
+    List<TaskForkItem> toTaskForkItemList(List<TaskFork> taskForkList);
 
     Performance toPerformance(TaskFork taskFork);
 

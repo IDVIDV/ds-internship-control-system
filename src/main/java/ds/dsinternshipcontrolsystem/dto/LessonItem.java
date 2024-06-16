@@ -6,13 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "Данные, отправляемые приложением при запросе занятия")
-public class LessonDto {
+@ApiModel(description = "Данные, отправляемые приложением при запросе всех занятий стажировки")
+public class LessonItem {
     @ApiModelProperty(
             example = "1",
             value = "Id занятия"
@@ -36,9 +34,4 @@ public class LessonDto {
             value = "Описание занятия"
     )
     private String description;
-
-    @ApiModelProperty(
-            value = "Задания занятия"
-    )
-    private List<TaskItem> taskItemList;
 }

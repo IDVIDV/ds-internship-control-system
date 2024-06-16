@@ -27,6 +27,6 @@ public class ReportService {
                 UserInternshipStatus.JOINED
         );
 
-        return new Report(userMapper.toUserDtoList(users), taskMapper.toTaskDtoList(tasks));
+        return new Report(userMapper.toUserDtoList(users), taskMapper.toTaskItemList(tasks));
     }
 }

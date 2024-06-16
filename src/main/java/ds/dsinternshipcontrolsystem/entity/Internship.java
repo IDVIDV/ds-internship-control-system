@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,9 +39,9 @@ public class Internship {
     private Timestamp signEndDate;
     @Enumerated(EnumType.STRING)
     private InternshipStatus status;
-    @OneToMany(mappedBy = "internship", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "internship")
     private List<UserInternship> userInternships;
-    @OneToMany(mappedBy = "internship", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "internship")
     private List<Lesson> lessons;
 
     @Override

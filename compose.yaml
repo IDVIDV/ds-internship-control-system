@@ -35,8 +35,8 @@ services:
         gitlab_rails['initial_root_password'] = '${GITLAB_INIT_PASSWORD}'
     ports:
       - '9876:9876'
-      - '443:443'
-      - '22:22'
+      - '444:443'
+      - '23:22'
     volumes:
       - '${HOST_GITLAB_CONFIG_DIR}:${GITLAB_CONFIG_DIR}'
       - '${HOST_GITLAB_LOGS_DIR}:${GITLAB_LOGS_DIR}'

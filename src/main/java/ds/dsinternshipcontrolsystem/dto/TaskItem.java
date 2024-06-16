@@ -6,13 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "Данные, отправляемые приложением при запросе задания")
-public class TaskDto {
+@ApiModel(description = "Данные, отправляемые приложением при запросе всех заданий занятия")
+public class TaskItem {
     @ApiModelProperty(
             example = "1",
             value = "Id задания"
@@ -42,9 +40,4 @@ public class TaskDto {
             value = "Ссылка на эталонный репозиторий в gitlab"
     )
     private String url;
-
-    @ApiModelProperty(
-            value = "Форки, сделанные от задания"
-    )
-    private List<TaskForkItem> taskForkItemList;
 }
