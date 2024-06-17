@@ -102,7 +102,7 @@ public class InternshipServiceTest {
     @Test
     void addInternshipTest() {
         Internship internship = getInternship(InternshipStatus.REGISTRY);
-        AddInternship addInternship = getAddIntenrship();
+        AddInternship addInternship = getAddInternship();
         InternshipDto internshipDto = getInternshipDto(InternshipStatus.REGISTRY);
         internship.setStatus(null);
 
@@ -239,7 +239,7 @@ public class InternshipServiceTest {
                 internshipStatus);
     }
 
-    private static AddInternship getAddIntenrship() {
+    private static AddInternship getAddInternship() {
         return new AddInternship("name", "desc",
                 Timestamp.valueOf("2024-06-15 00:00:00"),
                 Timestamp.valueOf("2024-06-20 00:00:00"));
